@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0
+                              https://maven.apache.org/xsd/settings-1.2.0.xsd">
+
+    <!--
+        settings.xml local do projeto.
+        Use com: mvn -s settings.xml <goal>
+        Ou com o wrapper:  .\mvnw -s settings.xml <goal>
+
+        Esse arquivo ignora qualquer mirror/proxy corporativo do ~/.m2/settings.xml
+        e baixa as dependências diretamente do Maven Central.
+    -->
+
+    <!-- Sem mirrors: vai direto ao repositório declarado (Maven Central) -->
+    <mirrors/>
+
+    <!-- Sem proxies corporativos -->
+    <proxies/>
+
+    <!-- Sem servidores de autenticação corporativos -->
+    <servers/>
+
+    <profiles>
+        <profile>
+            <id>default-central</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <name>Maven Central</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Maven Central Plugins</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>default-central</activeProfile>
+    </activeProfiles>
+
+</settings>
+
