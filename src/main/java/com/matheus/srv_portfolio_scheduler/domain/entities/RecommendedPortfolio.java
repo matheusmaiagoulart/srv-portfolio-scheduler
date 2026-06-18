@@ -1,6 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.domain.entities;
 
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
+import jakarta.annotation.Nullable;
 import lombok.*;
 
 import java.time.OffsetDateTime;
@@ -19,12 +20,12 @@ public class RecommendedPortfolio {
     private OffsetDateTime terminationDate;
     private List<PortfolioItem> portfolioItems;
 
-    public static RecommendedPortfolio create(String name, List<PortfolioItem> portfolioItems) {
+    public static RecommendedPortfolio create(String name, List<PortfolioItem> portfolioItems, @Nullable OffsetDateTime terminationDate) {
 
         if (name == null || name.isBlank())
             throw new BusinessException("INVALID_PORTFOLIO_NAME", "A recommended portfolio must have a name.");
 
-        if (portfolioItems == null || portfolioItems.isEmpty() || portfolioItems.stream().count() != 5)
+        if (portfolioItems == null || portfolioItems.size() != 5)
             throw new BusinessException("INVALID_PORTFOLIO_ITEMS", "A recommended portfolio must have exactly 5 items.");
 
         if (portfolioItems.stream().map(PortfolioItem::getTicker).distinct().count() != 5) {
@@ -41,6 +42,7 @@ public class RecommendedPortfolio {
                 .active(true)
                 .createdAt(OffsetDateTime.now())
                 .portfolioItems(portfolioItems)
+                .terminationDate(terminationDate)
                 .build();
 
         portfolioItems.forEach(item -> item.setRecommendedPortfolio(portfolio));
