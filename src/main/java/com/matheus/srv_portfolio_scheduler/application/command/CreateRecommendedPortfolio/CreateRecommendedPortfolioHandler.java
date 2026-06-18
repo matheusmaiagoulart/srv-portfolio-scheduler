@@ -26,7 +26,8 @@ public class CreateRecommendedPortfolioHandler implements CreateRecommendedPortf
 
         RecommendedPortfolio portfolio = RecommendedPortfolio.create(
                 request.name(),
-                request.portfolioItems().stream().map(PortfolioItemCommand::toDomain).toList());
+                request.portfolioItems().stream().map(PortfolioItemCommand::toDomain).toList(),
+                request.terminationDate());
 
         recommendedPortfolioRepository.save(portfolio);
 

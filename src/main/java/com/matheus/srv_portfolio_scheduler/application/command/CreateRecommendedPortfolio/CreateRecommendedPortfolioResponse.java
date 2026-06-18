@@ -15,7 +15,7 @@ public record CreateRecommendedPortfolioResponse(
         OffsetDateTime createdAt,
         List<PortfolioItemResponse> portfolioItems,
         boolean rebalanceTriggered,
-        String Message) {
+        String message) {
 
     public static CreateRecommendedPortfolioResponse successfullyCreated(RecommendedPortfolio portfolio, boolean rebalanceTriggered) {
         return CreateRecommendedPortfolioResponse.builder()
@@ -25,7 +25,7 @@ public record CreateRecommendedPortfolioResponse(
                 .createdAt(portfolio.getCreatedAt())
                 .portfolioItems(portfolio.getPortfolioItems().stream().map(PortfolioItemResponse::fromDomain).toList())
                 .rebalanceTriggered(rebalanceTriggered)
-                .Message("Recommended portfolio created successfully.")
+                .message("Recommended portfolio created successfully.")
                 .build();
     }
 }
