@@ -10,21 +10,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ConditionalOnProperty(value = "springdoc.swagger-ui.enabled")
-public class SwaggerOpenApiConfig {
-    public class SwaggerConfig implements WebMvcConfigurer {
+public class SwaggerOpenApiConfig implements WebMvcConfigurer {
 
-        @Override
-        public void addViewControllers(ViewControllerRegistry registry) {
-            registry.addViewController("/swagger-ui/")
-                    .setViewName("forward:" + "/swagger-ui/index.html");
-        }
-
-        @Bean
-        public OpenAPI springShopOpenAPI() {
-            return new OpenAPI()
-                    .info(new Info().title("Portfolio Scheduler")
-                            .description("Sistema de compra automatica de ações baseada em uma cesta Top Five (5 Ações).")
-                            .version("v1"));
-        }
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/swagger-ui/")
+                .setViewName("forward:" + "/swagger-ui/index.html");
     }
+
+    @Bean
+    public OpenAPI springShopOpenAPI() {
+        return new OpenAPI()
+                .info(new Info().title("Portfolio Scheduler")
+                        .description("Sistema de compra automatica de ações baseada em uma cesta Top Five (5 Ações).")
+                        .version("v1"));
+    }
+
 }
