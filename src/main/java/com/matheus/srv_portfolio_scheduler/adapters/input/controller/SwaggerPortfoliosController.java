@@ -1,0 +1,22 @@
+package com.matheus.srv_portfolio_scheduler.adapters.input.controller;
+
+import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@Tag(name = "PortfoliosController")
+public interface SwaggerPortfoliosController {
+
+    @Operation(summary = "Criação de cesta",
+            description = "Cria uma cesta com 5 ações recomendadas pela corretora, " +
+                    "que vão ser referênica para compras automatizadas")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Ok")})
+    ResponseEntity<CreateRecommendedPortfolioResponse> CreateRecommendedPortfolio(
+            @Valid @RequestBody CreateRecommendedPortfolioCommand request);
+}
