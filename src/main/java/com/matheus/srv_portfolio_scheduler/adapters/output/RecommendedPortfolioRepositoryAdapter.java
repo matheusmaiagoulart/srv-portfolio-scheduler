@@ -20,8 +20,13 @@ public class RecommendedPortfolioRepositoryAdapter implements RecommendedPortfol
 
     @Override
     public void save(RecommendedPortfolio recommendedPortfolio) {
-        JpaRecommendedPortfolio jpaEntity = RecommendedPortfolioMapper.toJpaEntity(recommendedPortfolio);
-        repository.save(jpaEntity);
+        try {
+            JpaRecommendedPortfolio jpaEntity = RecommendedPortfolioMapper.toJpaEntity(recommendedPortfolio);
+            repository.save(jpaEntity);
+        } catch (Exception e) {
+            log.error("Error saving recommended portfolio: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to save recommended portfolio", e);
+        }
     }
 
     @Override
