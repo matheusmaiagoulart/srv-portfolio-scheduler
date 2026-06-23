@@ -24,6 +24,6 @@ public class PortfoliosController implements SwaggerPortfoliosController {
     public ResponseEntity<CreateRecommendedPortfolioResponse> createRecommendedPortfolio(
              @RequestBody @Valid CreateRecommendedPortfolioCommand request) {
 
-        return ResponseEntity.ok(createRecommendedPortfolioUseCase.handler(request));
+        return ResponseEntity.status(201).body(createRecommendedPortfolioUseCase.handler(request));
     }
 }

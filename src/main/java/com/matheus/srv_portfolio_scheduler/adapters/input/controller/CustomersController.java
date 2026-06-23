@@ -23,6 +23,6 @@ public class CustomersController implements SwaggerCustomersController {
     @PostMapping
     public ResponseEntity<RegisterCustomerSubscriberResponse> registerCustomerSubscriber(
             @RequestBody @Valid RegisterCustomerSubscriberCommand command) {
-        return ResponseEntity.ok(registerCustomerSubscriberUseCase.handler(command));
+        return ResponseEntity.status(201).body(registerCustomerSubscriberUseCase.handler(command));
     }
 }
