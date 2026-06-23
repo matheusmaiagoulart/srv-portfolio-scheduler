@@ -6,6 +6,6 @@ public class DuplicatedCpfException extends BusinessException {
     private static final String errorMessage = "CPF already exists: ";
 
     public DuplicatedCpfException(String cpf) {
-        super(errorCode, String.format(errorMessage, cpf));
+        super(errorCode, errorMessage.concat(cpf));
     }
 }
