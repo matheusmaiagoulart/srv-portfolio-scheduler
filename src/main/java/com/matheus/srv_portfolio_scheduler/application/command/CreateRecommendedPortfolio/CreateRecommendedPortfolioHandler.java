@@ -4,9 +4,11 @@ import com.matheus.srv_portfolio_scheduler.application.ports.input.CreateRecomme
 import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CreateRecommendedPortfolioHandler implements CreateRecommendedPortfolioUseCase {
