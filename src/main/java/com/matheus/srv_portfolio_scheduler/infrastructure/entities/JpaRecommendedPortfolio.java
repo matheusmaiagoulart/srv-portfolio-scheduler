@@ -29,9 +29,9 @@ public class JpaRecommendedPortfolio {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<JpaPortfolioItems> portfolioItems;
+    private List<JpaPortfolioItem> portfolioItems;
 
-    public static JpaRecommendedPortfolio create(String name, List<JpaPortfolioItems> portfolioItems) {
+    public static JpaRecommendedPortfolio create(String name, List<JpaPortfolioItem> portfolioItems) {
 
         JpaRecommendedPortfolio portfolio = JpaRecommendedPortfolio.builder()
                 .name(name)

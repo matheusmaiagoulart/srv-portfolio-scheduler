@@ -1,0 +1,9 @@
+package com.matheus.srv_portfolio_scheduler.application.ports.input;
+
+import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberResponse;
+
+public interface RegisterCustomerSubscriberUseCase {
+
+    RegisterCustomerSubscriberResponse handler(RegisterCustomerSubscriberCommand request);
+}

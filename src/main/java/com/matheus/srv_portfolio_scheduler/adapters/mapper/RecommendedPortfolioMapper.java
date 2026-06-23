@@ -1,7 +1,7 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output.mapper;
+package com.matheus.srv_portfolio_scheduler.adapters.mapper;
 
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
-import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaPortfolioItems;
+import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaPortfolioItem;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaRecommendedPortfolio;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class RecommendedPortfolioMapper {
 
     public static JpaRecommendedPortfolio toJpaEntity(RecommendedPortfolio portfolio) {
-        List<JpaPortfolioItems> items = portfolio.getPortfolioItems().stream()
+        List<JpaPortfolioItem> items = portfolio.getPortfolioItems().stream()
                 .map(PortfolioItemMapper::toJpaEntity)
                 .toList();
 
