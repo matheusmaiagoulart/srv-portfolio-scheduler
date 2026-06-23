@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.adapters.input.controller;
+package com.matheus.srv_portfolio_scheduler.adapters.input.swagger;
 
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioResponse;
@@ -17,6 +17,6 @@ public interface SwaggerPortfoliosController {
             description = "Cria uma cesta com 5 ações recomendadas pela corretora, " +
                     "que vão ser referênica para compras automatizadas")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Ok")})
-    ResponseEntity<CreateRecommendedPortfolioResponse> CreateRecommendedPortfolio(
+    ResponseEntity<CreateRecommendedPortfolioResponse> createRecommendedPortfolio(
             @Valid @RequestBody CreateRecommendedPortfolioCommand request);
 }
