@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Entity(name = "portfolio_item")
+@Entity(name = "portfolio_items")
 @Builder(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class JpaPortfolioItems {
+public class JpaPortfolioItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +22,8 @@ public class JpaPortfolioItems {
     private String ticker;
     private int percentage;
 
-    public static JpaPortfolioItems create(String ticker, int percentage) {
-        return JpaPortfolioItems.builder()
+    public static JpaPortfolioItem create(String ticker, int percentage) {
+        return JpaPortfolioItem.builder()
                 .ticker(ticker)
                 .percentage(percentage)
                 .build();
