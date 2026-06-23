@@ -1,6 +1,8 @@
 package com.matheus.srv_portfolio_scheduler.adapters.exception.handler;
 
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.DuplicatedCpfException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.DuplicatedEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +18,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ExceptionResponse> businessException(BusinessException ex) {
         var httpStatus = HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicatedCpfException.class)
+    public ResponseEntity<ExceptionResponse> duplicatedCpfException(DuplicatedCpfException ex) {
+        var httpStatus = HttpStatus.CONFLICT;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicatedEmailException.class)
+    public ResponseEntity<ExceptionResponse> duplicatedEmailException(DuplicatedEmailException ex) {
+        var httpStatus = HttpStatus.CONFLICT;
 
         return ResponseEntity
                 .status(httpStatus)
