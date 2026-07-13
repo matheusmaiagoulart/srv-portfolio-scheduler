@@ -3,7 +3,6 @@ package com.matheus.srv_portfolio_scheduler.domain.entities;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
