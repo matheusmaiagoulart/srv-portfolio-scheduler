@@ -7,5 +7,5 @@ import java.util.List;
 public interface DedoDuroOutboxRepositoryPort {
     void saveAll(List<DedoDuroOutbox> dedoDuroOutboxes);
     void update(DedoDuroOutbox dedoDuroOutbox);
-    List<DedoDuroOutbox> getChunckOfOutboxes();
+    List<DedoDuroOutbox> getChunkOfOutboxes(int batch_size);
 }

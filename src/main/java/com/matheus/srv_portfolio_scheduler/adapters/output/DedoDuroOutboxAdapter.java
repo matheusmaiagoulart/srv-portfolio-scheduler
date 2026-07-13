@@ -22,11 +22,11 @@ public class DedoDuroOutboxAdapter implements DedoDuroOutboxRepositoryPort {
 
     @Override
     public void update(DedoDuroOutbox dedoDuroOutbox) {
-        repository.save(DedoDuroOutboxMapper.toJpaEntity(dedoDuroOutbox));
+        repository.saveAndFlush(DedoDuroOutboxMapper.toJpaEntity(dedoDuroOutbox));
     }
 
     @Override
-    public List<DedoDuroOutbox> getChunckOfOutboxes() {
-        return List.of();
+    public List<DedoDuroOutbox> getChunkOfOutboxes(int batch_size) {
+        return repository.getChunkOfOutboxes(batch_size).stream().map(DedoDuroOutboxMapper::toDomain).toList();
     }
 }

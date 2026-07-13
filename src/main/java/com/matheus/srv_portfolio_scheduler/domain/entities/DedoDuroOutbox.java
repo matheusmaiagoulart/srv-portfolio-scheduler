@@ -12,16 +12,18 @@ import java.time.LocalDateTime;
 public class DedoDuroOutbox {
 
     private long id;
-    String payload;
-    OutboxStatus status;
-    LocalDateTime createdAt;
-    LocalDateTime publishedAt;
-    String errorMessage;
+    private String payload;
+    private OutboxStatus status;
+    private int attempts;
+    private  LocalDateTime createdAt;
+    private LocalDateTime publishedAt;
+    private String errorMessage;
 
     public static DedoDuroOutbox create(String payload) {
         return DedoDuroOutbox.builder()
                 .payload(payload)
                 .status(OutboxStatus.PENDING)
+                .attempts(0)
                 .createdAt(LocalDateTime.now())
                 .publishedAt(null)
                 .errorMessage(null)
@@ -29,11 +31,12 @@ public class DedoDuroOutbox {
     }
 
     public static DedoDuroOutbox reconstruct(
-            long id, String payload, OutboxStatus status, LocalDateTime createdAt, LocalDateTime publishedAt, String errorMessage) {
+            long id, String payload, OutboxStatus status, int attempts, LocalDateTime createdAt, LocalDateTime publishedAt, String errorMessage) {
         return DedoDuroOutbox.builder()
                 .id(id)
                 .payload(payload)
                 .status(status)
+                .attempts(attempts)
                 .createdAt(createdAt)
                 .publishedAt(publishedAt)
                 .errorMessage(errorMessage)
@@ -43,6 +46,10 @@ public class DedoDuroOutbox {
     public void markAsPublished() {
         this.status = OutboxStatus.PUBLISHED;
         this.publishedAt = LocalDateTime.now();
-        this.errorMessage = null;
+    }
+
+    public void markAsFailed(String errorMessage) {
+        this.errorMessage = errorMessage;
+        this.attempts = this.attempts + 1;
     }
 }
