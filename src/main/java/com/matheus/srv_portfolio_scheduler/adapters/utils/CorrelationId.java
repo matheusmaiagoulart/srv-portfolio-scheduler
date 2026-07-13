@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class CorrelationId {
 
-    private static final String CORRELATION_ID = "correlationId";
+    private static final String CORRELATION_ID = "correlation_id";
 
     public static String generate() {
         String correlationId = UUID.randomUUID().toString();
