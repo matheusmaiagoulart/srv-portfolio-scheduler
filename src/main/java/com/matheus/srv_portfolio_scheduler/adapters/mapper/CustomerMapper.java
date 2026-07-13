@@ -7,6 +7,7 @@ public class CustomerMapper {
 
     public static JpaCustomer toJpaEntity(Customer customer) {
         return JpaCustomer.builder()
+                .id(customer.getId())
                 .name(customer.getName())
                 .cpf(customer.getCpf())
                 .email(customer.getEmail())
