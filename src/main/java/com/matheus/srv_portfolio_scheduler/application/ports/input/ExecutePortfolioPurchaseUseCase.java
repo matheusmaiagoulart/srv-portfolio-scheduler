@@ -1,0 +1,8 @@
+package com.matheus.srv_portfolio_scheduler.application.ports.input;
+
+import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseResponse;
+
+public interface ExecutePortfolioPurchaseUseCase {
+    ExecutePortfolioPurchaseResponse handler(ExecutePortfolioPurchaseCommand command);
+}
