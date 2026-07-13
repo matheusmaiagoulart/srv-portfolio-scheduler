@@ -25,7 +25,6 @@ import java.util.Map;
 public class ProcessDistributionInBatch {
 
     private final DedoDuroOutboxRepositoryPort dedoDuroOutboxRepository;
-    private final DistributionPersistenceService distributionPersistence;
     private final IRDedoDuroOutboxService irDedoDuroOutboxService;
     private final IRDedoDuroCalculator irDedoDuroCalculator;
     private final CustomerRepositoryPort customerRepository;
