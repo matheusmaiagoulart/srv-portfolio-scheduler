@@ -9,6 +9,7 @@ public class CustodyMapper {
 
     public static JpaCustody toJpaEntity(Custody custody, JpaBrokerageAccount brokerageAccount) {
         return JpaCustody.builder()
+                .id(custody.getId())
                 .brokerageAccount(brokerageAccount)
                 .ticker(custody.getTicker())
                 .quantity(custody.getQuantity())
