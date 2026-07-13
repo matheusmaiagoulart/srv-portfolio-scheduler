@@ -7,7 +7,7 @@ import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedP
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Customer;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
-import com.matheus.srv_portfolio_scheduler.domain.exceptions.ActivePortfolioNotFound;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.ActivePortfolioNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class RegisterCustomerSubscriberHandler implements RegisterCustomerSubscr
                 request.monthlyAmount());
 
         RecommendedPortfolio activePortfolio = recommendedPortfolioRepository.getActiveRecommendedPortfolio()
-                .orElseThrow(ActivePortfolioNotFound::new);
+                .orElseThrow(ActivePortfolioNotFoundException::new);
 
         log.info("Initializing custodies creation with base portfolio: {}", activePortfolio.getName(),
                 kv("correlationId", CorrelationId.get()),
