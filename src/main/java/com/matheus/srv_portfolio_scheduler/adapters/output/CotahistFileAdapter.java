@@ -100,8 +100,8 @@ public class CotahistFileAdapter implements CotahistFilePort {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         String date = referenceDate.format(formatter);
-        String caminhoArquivo = String.valueOf(cotahistPath
-                .concat(date).concat(".TXT"));
+        String caminhoArquivo = cotahistPath
+                .concat(date).concat(".TXT");
 
         Path path = Paths.get(caminhoArquivo);
         if (path.toFile().exists()) {
