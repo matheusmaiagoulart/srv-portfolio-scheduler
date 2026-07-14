@@ -72,28 +72,11 @@ public class ExecutePortfolioPurchaseHandler implements ExecutePortfolioPurchase
 
         purchaseOrders = purchaseOrderRepository.save(purchaseOrders);
 
-        //updateMasterWithPurchasedAssets(masterAccount, purchaseOrders);
-
         DistributionsResultDTO resultDistribution = distributionInBatch.processInBatch(
                 purchaseOrders,
                 thirdValueOfAllCustomers,
                 masterAccount);
 
         return ExecutePortfolioPurchaseResponse.buildResponse(resultDistribution);
-    }
-
-    private void updateMasterWithPurchasedAssets(BrokerageAccount masterAccount, List<PurchaseOrder> purchaseOrders) {
-        log.info("Updating Master Custodies with purchased assets.");
-        masterAccount.getCustodies().forEach(custody -> {
-            purchaseOrders.stream()
-                    .filter(order -> order.getTicker().equals(custody.getTicker()))
-                    .findFirst()
-                    .ifPresent(order -> {
-                        custody.addPurchaseQuantity(order.getQuantity(), order.getUnitPrice());
-                        log.info("Adding custody for asset {} with new quantity {}",
-                                custody.getTicker(),
-                                custody.getQuantity());
-                    });
-        });
     }
 }
