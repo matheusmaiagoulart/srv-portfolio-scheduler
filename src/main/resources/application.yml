@@ -1,18 +1,38 @@
+app:
+  customers_batch_size: 1000
+  outbox_batch_size: 100
+  cotahist:
+    path: cotahist/COTAHIST_D
+  aliquota: 0.00005
+
 spring:
   datasource:
-    url: ${url}
-    driver-class-name: ${drive}
-    username: ${username}
-    password: ${password}
+    url: ${URL}
+    driver-class-name: ${DRIVE}
+    username: ${USERNAME}
+    password: ${PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
+    properties:
+      type:
+        preferred_enum_jdbc_type: VARCHAR
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
     baseline-version: 0
+  threads:
+    virtual:
+      enabled: true
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP-SERVER}
+    consumer:
+      group-id: ${GROUP-ID}
+      auto-offset-reset: earliest
+    topics:
+      ir-dedo-duro-compra-topic: "ir-compra-ativos"
 
 springdoc:
   pathsToMatch: /**
@@ -21,5 +41,7 @@ springdoc:
 
 logging:
   level:
-    org.flywaydb: DEBUG
-    org.springframework.boot.autoconfigure.flyway: DEBUG
+    org.flywaydb: debug
+    org.springframework.boot.autoconfigure.flyway: debug
+  pattern:
+    console: "%d %-5level [%X{correlation_id}] %logger - %msg%n"

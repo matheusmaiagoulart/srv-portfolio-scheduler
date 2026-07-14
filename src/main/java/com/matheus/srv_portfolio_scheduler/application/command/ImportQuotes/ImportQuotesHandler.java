@@ -1,0 +1,44 @@
+package com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes;
+
+import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.ImportQuotesUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.CotahistFilePort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.domain.entities.PortfolioItem;
+import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.ActivePortfolioNotFoundException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+
+@Slf4j
+@Service
+@AllArgsConstructor
+public class ImportQuotesHandler implements ImportQuotesUseCase {
+
+    private final CotahistFilePort cotahistFilePort;
+    private final RecommendedPortfolioRepositoryPort recommendedPortfolioRepositoryPort;
+
+    @Override
+    public List<QuoteDTO> handler(ImportQuotesCommand importQuotesCommand) {
+
+        log.info("Starting import cotahist quotes. Reference date: {}", importQuotesCommand.referenceDate());
+
+        String caminhoArquivo = cotahistFilePort.existsCotahistFile(importQuotesCommand.referenceDate())
+                .orElseThrow(() -> new BusinessException("COTAHIST_NOT_FOUND",
+                        "Cotahist file not found for the reference date: " + importQuotesCommand.referenceDate()));
+
+        RecommendedPortfolio portfolio = recommendedPortfolioRepositoryPort.getActiveRecommendedPortfolio()
+                .orElseThrow(ActivePortfolioNotFoundException::new);
+
+        HashSet<String> tickers = portfolio.getPortfolioItems().stream()
+                .map(PortfolioItem::getTicker)
+                .collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+        return cotahistFilePort.parse(tickers, caminhoArquivo);
+    }
+}

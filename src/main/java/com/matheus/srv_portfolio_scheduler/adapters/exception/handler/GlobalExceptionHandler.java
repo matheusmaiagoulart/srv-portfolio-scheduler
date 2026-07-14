@@ -1,8 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.exception.handler;
 
-import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
-import com.matheus.srv_portfolio_scheduler.domain.exceptions.DuplicatedCpfException;
-import com.matheus.srv_portfolio_scheduler.domain.exceptions.DuplicatedEmailException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,6 +40,50 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
     }
 
+    @ExceptionHandler(CotahistNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> cotahistNotFoundException(CotahistNotFoundException ex) {
+        var httpStatus = HttpStatus.NOT_FOUND;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalPurchaseDayException.class)
+    public ResponseEntity<ExceptionResponse> illegalPurchaseDayException(IllegalPurchaseDayException ex) {
+        var httpStatus = HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(MasterAccountNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> masterAccountNotFoundException(MasterAccountNotFoundException ex) {
+        var httpStatus = HttpStatus.NOT_FOUND;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(QuoteNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> quoteNotFoundException(QuoteNotFoundException ex) {
+        var httpStatus = HttpStatus.NOT_FOUND;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(ActivePortfolioNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> activePortfolioNotFoundException(ActivePortfolioNotFoundException ex) {
+        var httpStatus = HttpStatus.NOT_FOUND;
+
+        return ResponseEntity
+                .status(httpStatus)
+                .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         var errors = new HashMap<String, String>();

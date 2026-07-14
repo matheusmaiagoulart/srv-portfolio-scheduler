@@ -14,6 +14,7 @@ public class BrokerageAccountMapper {
 
     public static JpaBrokerageAccount toJpaEntity(BrokerageAccount brokerageAccount, JpaCustomer customer) {
         JpaBrokerageAccount jpaEntity = JpaBrokerageAccount.builder()
+                .id(brokerageAccount.getId())
                 .customer(customer)
                 .accountNumber(brokerageAccount.getAccountNumber())
                 .accountType(brokerageAccount.getAccountType())

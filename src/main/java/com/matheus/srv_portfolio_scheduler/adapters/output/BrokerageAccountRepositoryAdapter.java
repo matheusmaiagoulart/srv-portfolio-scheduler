@@ -16,6 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
 @Slf4j
@@ -48,5 +51,25 @@ public class BrokerageAccountRepositoryAdapter implements BrokerageAccountReposi
             if (message.contains("IX_customers_email")) throw new DuplicatedEmailException(customer.getEmail());
         }
         throw new BusinessException("DATABASE_ERROR", "An error occurred while saving the brokerage account.");
+    }
+
+    @Override
+    public void saveAll(List<BrokerageAccount> brokerageAccounts) {
+
+        List<JpaBrokerageAccount> brokerageAccountsJpa = brokerageAccounts.stream()
+                .map(brokerageAccount -> {
+                    JpaCustomer customer = CustomerMapper.toJpaEntity(brokerageAccount.getCustomer());
+                    return BrokerageAccountMapper.toJpaEntity(brokerageAccount, customer);
+                }).toList();
+
+        repository.saveAll(brokerageAccountsJpa);
+
+    }
+
+    @Override
+    public Optional<BrokerageAccount> getMasterAccount() {
+        Optional<JpaBrokerageAccount> masterAccount = repository.getMasterAccount();
+        var customer = CustomerMapper.toDomain(masterAccount.get().getCustomer());
+        return Optional.of(BrokerageAccountMapper.toDomain(masterAccount.get(), customer));
     }
 }

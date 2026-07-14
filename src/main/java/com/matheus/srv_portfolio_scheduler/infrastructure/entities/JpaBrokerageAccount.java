@@ -25,6 +25,8 @@ public class JpaBrokerageAccount {
     private JpaCustomer customer;
 
     private String accountNumber;
+
+    @Enumerated(EnumType.STRING)
     private BrokerageAccountType accountType;
     private OffsetDateTime createdAt;
 
