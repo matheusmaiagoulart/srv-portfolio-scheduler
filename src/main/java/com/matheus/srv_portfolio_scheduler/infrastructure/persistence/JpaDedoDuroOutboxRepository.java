@@ -12,7 +12,7 @@ public interface JpaDedoDuroOutboxRepository extends JpaRepository<JpaDedoDuroOu
     @Query(value = """
         SELECT TOP(:batch_size) * FROM ir_dedo_duro_outbox o
         WHERE o.status = 'PENDING' AND o.attempts < 3
-        ORDER BY o.created_at ASC
+        ORDER BY o.created_at
 """, nativeQuery = true)
     List<JpaDedoDuroOutbox> getChunkOfOutboxes(@Param("batch_size") int batch_size);
 }
