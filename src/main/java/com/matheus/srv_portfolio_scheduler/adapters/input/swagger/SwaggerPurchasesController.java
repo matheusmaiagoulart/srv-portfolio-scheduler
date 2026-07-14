@@ -1,5 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.input.swagger;
 
+import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes.ImportQuotesCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,5 +15,5 @@ public interface SwaggerPurchasesController {
             description = "Executa a compra automatizada de ações com base nas cotações importadas e " +
                     "na carteira recomendada.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Ok")})
-    ResponseEntity executePurchase(ImportQuotesCommand command);
+    ResponseEntity<ExecutePortfolioPurchaseResponse> executePurchase(ImportQuotesCommand command);
 }

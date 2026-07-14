@@ -1,6 +1,6 @@
 app:
   customers_batch_size: 1000
-  outbox_batch_size: 100
+  outbox_batch_size: 1000
   cotahist:
     path: cotahist/COTAHIST_D
   aliquota: 0.00005

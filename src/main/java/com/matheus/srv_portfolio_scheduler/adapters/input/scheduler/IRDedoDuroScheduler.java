@@ -16,8 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IRDedoDuroScheduler {
 
-    private final DedoDuroOutboxRepositoryPort outboxRepositoryPort;
     private final IRDedoDuroOutboxService outboxService;
+    private final DedoDuroOutboxRepositoryPort outboxRepositoryPort;
 
     @Value("${spring.kafka.topics.ir-dedo-duro-compra-topic}")
     private String TOPIC;
@@ -30,17 +30,41 @@ public class IRDedoDuroScheduler {
     @Scheduled(cron = "0 0 22 25 * ?")
     @Scheduled(fixedDelay = 3000)
     public void processPendingOutboxes() {
-        // get chunk of outbox
-        log.info("STARTING PENDING OUTBOX SCHEDULER");
-        List<DedoDuroOutbox> outboxList = outboxRepositoryPort.getChunkOfOutboxes(OUTBOX_BATCH_SIZE);
+        log.info("OUTBOX SCHEDULER STARTED");
 
-        if (outboxList.isEmpty()) return;
+        long init = System.currentTimeMillis();
+        long durationTime;
 
-        log.info("STARTING SENDING OUTBOX SCHEDULER");
-        outboxList.forEach(outbox -> {
-            outboxService.sendOutboxToBroker(outbox, TOPIC);
-        });
+        List<DedoDuroOutbox> outboxList;
+        int totalProcessed = 0;
 
-        log.info("ENDING PENDING OUTBOX SCHEDULER");
+        do {
+            outboxList = outboxRepositoryPort.getChunkOfOutboxes(OUTBOX_BATCH_SIZE);
+
+            if (outboxList.isEmpty()) break;
+
+            log.info("STARTING SENDING OUTBOX SCHEDULER");
+            outboxList.forEach(outbox -> {
+                outboxService.sendOutboxToBroker(outbox, TOPIC);
+            });
+
+            totalProcessed += outboxList.size();
+        } while (outboxList.size() == OUTBOX_BATCH_SIZE);
+
+        durationTime = System.currentTimeMillis() - init;
+
+        log.info("SCHEDULER FINISHED | DurationTime={} | TotalProcessed={}",
+                transformDurationTime(durationTime), totalProcessed);
+
+    }
+
+    private String transformDurationTime(long durationTime) {
+        if (durationTime > 1000) {
+            var seconds = durationTime / 1000;
+            var ms = durationTime % 1000;
+            return String.format("%dsec %dms", seconds, ms);
+        }
+
+        return String.format("%dms", durationTime);
     }
 }

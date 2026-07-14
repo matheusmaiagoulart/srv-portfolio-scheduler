@@ -8,19 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface JpaCustomerRepository extends JpaRepository<JpaCustomer, Long> {
-
-
-    @Query(""" 
-                SELECT c FROM customer c
-                JOIN FETCH c.brokerageAccount ba
-                JOIN FETCH ba.custodies
-                WHERE ba.accountType = 'MASTER'
-            """)
-    Optional<JpaCustomer> getMasterAccount();
 
     @Query("""
                 SELECT SUM(c.monthlyAmount.amount / 3) FROM customer c

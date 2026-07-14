@@ -1,6 +1,5 @@
 package com.matheus.srv_portfolio_scheduler.infrastructure.entities;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.matheus.srv_portfolio_scheduler.domain.enums.OutboxStatus;
 import jakarta.persistence.*;
 import lombok.*;
