@@ -1,6 +1,8 @@
 package com.matheus.srv_portfolio_scheduler.adapters.input.controller;
 
+import com.matheus.srv_portfolio_scheduler.adapters.input.swagger.SwaggerPurchasesController;
 import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes.ImportQuotesCommand;
 import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.ExecutePortfolioPurchaseUseCase;
@@ -16,18 +18,18 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "v1/api/purchases")
-public class PurchasesController {
+public class PurchasesController implements SwaggerPurchasesController {
 
     private final ImportQuotesUseCase importQuotesUseCase;
     private final ExecutePortfolioPurchaseUseCase executePortfolioPurchaseUseCase;
 
     @PostMapping("execute-purchase")
-    public ResponseEntity executePurchase(ImportQuotesCommand command) {
+    public ResponseEntity<ExecutePortfolioPurchaseResponse> executePurchase(ImportQuotesCommand command) {
 
         List<QuoteDTO> result = importQuotesUseCase.handler(command);
 
-        executePortfolioPurchaseUseCase.handler(new ExecutePortfolioPurchaseCommand(result));
+        var resultPurchase = executePortfolioPurchaseUseCase.handler(new ExecutePortfolioPurchaseCommand(result));
 
-        return ResponseEntity.status(201).body(result);
+        return ResponseEntity.status(201).body(resultPurchase);
     }
 }
