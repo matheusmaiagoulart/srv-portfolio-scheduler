@@ -1,7 +1,5 @@
 package com.matheus.srv_portfolio_scheduler.domain.events;
 
-import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

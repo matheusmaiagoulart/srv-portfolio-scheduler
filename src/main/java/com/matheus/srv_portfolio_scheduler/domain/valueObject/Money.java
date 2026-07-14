@@ -3,7 +3,6 @@ package com.matheus.srv_portfolio_scheduler.domain.valueObject;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
