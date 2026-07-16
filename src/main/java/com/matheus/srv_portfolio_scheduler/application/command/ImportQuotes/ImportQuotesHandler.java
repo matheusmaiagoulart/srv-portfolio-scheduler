@@ -2,8 +2,10 @@ package com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes;
 
 import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.ImportQuotesUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.AssetPriceRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.CotahistFilePort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.domain.entities.AssetPrice;
 import com.matheus.srv_portfolio_scheduler.domain.entities.PortfolioItem;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.ActivePortfolioNotFoundException;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ImportQuotesHandler implements ImportQuotesUseCase {
 
     private final CotahistFilePort cotahistFilePort;
+    private final AssetPriceRepositoryPort assetPriceRepository;
     private final RecommendedPortfolioRepositoryPort recommendedPortfolioRepositoryPort;
 
     @Override
@@ -39,6 +42,19 @@ public class ImportQuotesHandler implements ImportQuotesUseCase {
                 .map(PortfolioItem::getTicker)
                 .collect(HashSet::new, HashSet::add, HashSet::addAll);
 
+        List<QuoteDTO> cotahistResult = cotahistFilePort.parse(tickers, caminhoArquivo);
+
+        List<AssetPrice> assetsPrices = cotahistResult.stream()
+                .map(quote -> AssetPrice.create(
+                        quote.dataPregao(),
+                        quote.ticker(),
+                        quote.openPrice(),
+                        quote.closePrice(),
+                        quote.maxPrice(),
+                        quote.minPrice()))
+                .toList();
+
+        assetPriceRepository.saveAll(assetsPrices);
         return cotahistFilePort.parse(tickers, caminhoArquivo);
     }
 }
