@@ -18,7 +18,7 @@ public class CustomerMapper {
     }
 
     public static Customer toDomain(JpaCustomer customer) {
-        return Customer.reconstruct(
+        Customer domainCustomer = Customer.reconstruct(
                 customer.getId(),
                 customer.getName(),
                 customer.getCpf(),
@@ -27,5 +27,9 @@ public class CustomerMapper {
                 customer.isActive(),
                 customer.getJoiningDate()
         );
+        var brokerageAccountMapped = BrokerageAccountMapper.toDomain(customer.getBrokerageAccount(), domainCustomer);
+        domainCustomer.setBrokerageAccount(brokerageAccountMapped);
+        return domainCustomer;
+
     }
 }
