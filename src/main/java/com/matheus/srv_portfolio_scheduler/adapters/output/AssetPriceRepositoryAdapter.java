@@ -10,7 +10,6 @@ import com.matheus.srv_portfolio_scheduler.infrastructure.persistence.JpaAssetPr
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
