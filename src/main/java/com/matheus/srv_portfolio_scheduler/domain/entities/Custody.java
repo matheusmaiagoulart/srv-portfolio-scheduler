@@ -69,4 +69,68 @@ public class Custody {
             this.lastUpdate = OffsetDateTime.now();
         }
     }
+
+    /**
+     * Calculates the Profit and Loss (P/L) of this custody position.
+     * <p>
+     * Formula: (currentPrice - averagePrice) × quantity
+     * <p>
+     * A positive value indicates profit; a negative value indicates loss.
+     * Example: bought 68 PETR4 at R$49.41, current price R$55.00 → P/L = R$380.12
+     *
+     * @param currentPrice the current market price of the asset
+     * @return the absolute P/L value in BRL
+     */
+    public Money calcPl(Money currentPrice) {
+        var value =  Money.create(currentPrice.getAmount().subtract(this.averagePrice.getAmount())
+                .multiply(BigDecimal.valueOf(this.quantity)));
+
+        return value;
+    }
+
+    /**
+     * Calculates the Profit and Loss percentage (P/L%) of this custody position.
+     * <p>
+     * Formula: ((currentPrice - averagePrice) / averagePrice) × 100
+     * <p>
+     * Represents how much the asset has appreciated or depreciated relative to the purchase price.
+     * Example: bought at R$49.41, current price R$55.00 → P/L% = 11.31%
+     *
+     * @param currentPrice the current market price of the asset
+     * @return the P/L percentage with 2 decimal places
+     */
+    public BigDecimal calcPlPercentual(Money currentPrice) {
+        if (this.averagePrice.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return currentPrice.getAmount().subtract(this.averagePrice.getAmount())
+                .divide(this.averagePrice.getAmount(), 6, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * Calculates the composition percentage of this asset within the total portfolio.
+     * <p>
+     * Formula: (currentPrice × quantity) / portfolioCurrentValue × 100
+     * <p>
+     * Represents how much weight this asset holds in the overall portfolio at current market prices.
+     * Example: PETR4 current value = R$3,740 out of R$11,433.25 total → composition = 32.71%
+     *
+     * @param currentPrice          the current market price of the asset
+     * @param portfolioCurrentValue the total current market value of all custodies combined
+     * @return the composition percentage with 4 decimal places precision
+     */
+    public Money calcCompositionPercentage(Money currentPrice, Money portfolioCurrentValue) {
+        if (portfolioCurrentValue.getAmount().compareTo(BigDecimal.ZERO) == 0) {
+            return Money.create(BigDecimal.ZERO);
+        }
+
+        BigDecimal currentValue = currentPrice.getAmount().multiply(BigDecimal.valueOf(this.quantity));
+
+        return Money.create(
+                currentValue.divide(portfolioCurrentValue.getAmount(), 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100)));
+    }
 }
