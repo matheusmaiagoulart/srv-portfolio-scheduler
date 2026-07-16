@@ -23,9 +23,6 @@ public class Money {
         this.amount = amount.setScale(SCALE, ROUNDING_MODE);
     }
     public static Money create(BigDecimal amount) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new BusinessException("INVALID_AMOUNT", "Amount must be greater than zero");
-        }
         return new Money(amount);
     }
 
