@@ -82,10 +82,8 @@ public class Custody {
      * @return the absolute P/L value in BRL
      */
     public Money calcPl(Money currentPrice) {
-        var value =  Money.create(currentPrice.getAmount().subtract(this.averagePrice.getAmount())
+        return Money.create(currentPrice.getAmount().subtract(this.averagePrice.getAmount())
                 .multiply(BigDecimal.valueOf(this.quantity)));
-
-        return value;
     }
 
     /**
