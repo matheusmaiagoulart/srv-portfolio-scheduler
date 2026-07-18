@@ -33,6 +33,11 @@ spring:
       auto-offset-reset: earliest
     topics:
       ir-dedo-duro-compra-topic: "ir-compra-ativos"
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
 
 springdoc:
   pathsToMatch: /**
