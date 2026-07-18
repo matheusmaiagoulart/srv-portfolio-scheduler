@@ -16,10 +16,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class IRDedoDuroOutboxService {
-
-    private final DedoDuroOutboxRepositoryPort dedoDuroOutboxRepository;
-    private final KafkaProducerPort kafkaProducer;
+    
     private final ObjectMapper objectMapper;
+    private final KafkaProducerPort kafkaProducer;
+    private final DedoDuroOutboxRepositoryPort dedoDuroOutboxRepository;
 
     public List<DedoDuroOutbox> createOutboxEntries(List<String> payloads) {
         return payloads.stream()
