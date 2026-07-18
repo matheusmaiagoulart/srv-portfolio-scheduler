@@ -68,8 +68,10 @@ public class BrokerageAccountRepositoryAdapter implements BrokerageAccountReposi
 
     @Override
     public Optional<BrokerageAccount> getMasterAccount() {
-        Optional<JpaBrokerageAccount> masterAccount = repository.getMasterAccount();
-        var customer = CustomerMapper.toDomain(masterAccount.get().getCustomer());
-        return Optional.of(BrokerageAccountMapper.toDomain(masterAccount.get(), customer));
+        return repository.getMasterAccount()
+                .map(brokerageAccount -> {
+                    var customer = CustomerMapper.toDomain(brokerageAccount.getCustomer());
+                    return BrokerageAccountMapper.toDomain(brokerageAccount, customer);
+                });
     }
 }
