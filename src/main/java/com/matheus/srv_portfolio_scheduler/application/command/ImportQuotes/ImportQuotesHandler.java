@@ -1,10 +1,10 @@
 package com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes;
 
 import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
-import com.matheus.srv_portfolio_scheduler.application.ports.input.ImportQuotesUseCase;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.AssetPriceRepositoryPort;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.CotahistFilePort;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ImportQuotesUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.AssetPriceRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.CotahistFilePort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.RecommendedPortfolioRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.AssetPrice;
 import com.matheus.srv_portfolio_scheduler.domain.entities.PortfolioItem;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;

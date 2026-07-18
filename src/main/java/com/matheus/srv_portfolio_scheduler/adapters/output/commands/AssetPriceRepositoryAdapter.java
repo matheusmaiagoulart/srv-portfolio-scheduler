@@ -1,8 +1,8 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output;
+package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.AssetPriceMapper;
 import com.matheus.srv_portfolio_scheduler.application.dto.AssetPricesByTickerDTO;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.AssetPriceRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.AssetPriceRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.AssetPrice;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaAssetPrice;
@@ -26,15 +26,5 @@ public class AssetPriceRepositoryAdapter implements AssetPriceRepositoryPort {
                 .map(AssetPriceMapper::toJpaEntity).toList();
 
         jpaAssetPriceRepository.saveAll(jpaAssetPrices);
-    }
-
-    @Override
-    public Map<String, Money> getAssetsPrices(List<String> assets) {
-        return jpaAssetPriceRepository.getAssetsPrices(assets)
-                .stream()
-                .collect(Collectors.toMap(
-                        AssetPricesByTickerDTO::ticker,
-                        dto -> Money.create(dto.closePrice())
-                ));
     }
 }

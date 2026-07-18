@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.service;
 
-import com.matheus.srv_portfolio_scheduler.application.ports.output.DedoDuroOutboxRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.DedoDuroOutboxRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.messaging.KafkaProducerPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.DedoDuroOutbox;
 import lombok.RequiredArgsConstructor;

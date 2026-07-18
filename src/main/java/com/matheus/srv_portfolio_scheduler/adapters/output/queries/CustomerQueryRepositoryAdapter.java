@@ -1,7 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.output.queries;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.CustomerMapper;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.AssetPriceRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.AssetPriceQueryRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.CustomerQueryRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio.GetCustomerPortfolioResponse;
@@ -10,7 +9,6 @@ import com.matheus.srv_portfolio_scheduler.domain.entities.Customer;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.CustomerNotFound;
 import com.matheus.srv_portfolio_scheduler.domain.services.PortfolioAnalytics;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
-import com.matheus.srv_portfolio_scheduler.infrastructure.queries.JpaAssetPriceQueryRepository;
 import com.matheus.srv_portfolio_scheduler.infrastructure.queries.JpaCustomerQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

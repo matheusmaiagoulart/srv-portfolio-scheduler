@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.input.scheduler;
 
-import com.matheus.srv_portfolio_scheduler.application.ports.output.DedoDuroOutboxRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.DedoDuroOutboxRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.service.IRDedoDuroOutboxService;
 import com.matheus.srv_portfolio_scheduler.domain.entities.DedoDuroOutbox;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class IRDedoDuroScheduler {
     @Scheduled(cron = "0 0 22 5 * ?")
     @Scheduled(cron = "0 0 22 15 * ?")
     @Scheduled(cron = "0 0 22 25 * ?")
-    @Scheduled(fixedDelay = 3000)
+    //@Scheduled(fixedDelay = 3000)
     public void processPendingOutboxes() {
         log.info("OUTBOX SCHEDULER STARTED");
 

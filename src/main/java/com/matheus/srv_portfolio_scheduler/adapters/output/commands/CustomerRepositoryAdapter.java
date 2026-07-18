@@ -1,8 +1,8 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output;
+package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.BrokerageAccountMapper;
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.CustomerMapper;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.CustomerRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.CustomerRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Customer;
 import com.matheus.srv_portfolio_scheduler.domain.services.dto.CustodyPurchaseDataDTO;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;

@@ -1,8 +1,8 @@
 package com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio;
 
 import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
-import com.matheus.srv_portfolio_scheduler.application.ports.input.CreateRecommendedPortfolioUseCase;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.CreateRecommendedPortfolioUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.RecommendedPortfolioRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
