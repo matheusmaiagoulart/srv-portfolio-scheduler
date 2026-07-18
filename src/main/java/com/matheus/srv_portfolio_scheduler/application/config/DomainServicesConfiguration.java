@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.infrastructure.config;
+package com.matheus.srv_portfolio_scheduler.application.config;
 
 import com.matheus.srv_portfolio_scheduler.domain.services.IRDedoDuroCalculator;
 import com.matheus.srv_portfolio_scheduler.domain.services.PortfolioDistribution;
