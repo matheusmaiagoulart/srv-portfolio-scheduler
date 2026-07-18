@@ -57,16 +57,16 @@ public class ProcessDistributionInBatch {
 
             DistributionsResultDTO distributionsResult = portfolioDistribution.distribute(purchaseOrders, purchaseRoundData, masterAccount);
 
+            deliveryRepository.saveAll(distributionsResult.deliveries());
+            custodyRepository.saveAll(distributionsResult.modifiedCustodies());
+
             responseDistributions.addAll(distributionsResult.distributions());
             responsePurchaseOrdersPerAssets.addAll(distributionsResult.purchaseOrdersPerAssets());
             responseResidualsFromMaster.addAll(distributionsResult.residualsFromMaster());
             responseDeliveries.addAll(distributionsResult.deliveries());
             modifiedCustodies.addAll(distributionsResult.modifiedCustodies());
 
-            deliveryRepository.saveAll(responseDeliveries);
-            custodyRepository.saveAll(modifiedCustodies);
-
-            List<IRDedoDuroEvent> irDedoDuroList = irDedoDuroCalculator.calculate(responseDeliveries, customersChunk);
+            List<IRDedoDuroEvent> irDedoDuroList = irDedoDuroCalculator.calculate(distributionsResult.deliveries(), customersChunk);
             dedoDuroOutboxRepository.saveAll(irDedoDuroOutboxService.createOutboxEntries(irDedoDuroList.stream().map(IRDedoDuroEvent::toString).toList()));
 
 
