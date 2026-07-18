@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.application.ports.output;
+package com.matheus.srv_portfolio_scheduler.application.ports.output.queries;
 
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output;
+package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.RecommendedPortfolioMapper;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.RecommendedPortfolioRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaRecommendedPortfolio;
 import com.matheus.srv_portfolio_scheduler.infrastructure.persistence.JpaRecommendedPortfolioRepository;

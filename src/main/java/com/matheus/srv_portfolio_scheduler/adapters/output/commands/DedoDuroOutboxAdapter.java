@@ -1,7 +1,7 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output;
+package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.DedoDuroOutboxMapper;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.DedoDuroOutboxRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.DedoDuroOutboxRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.DedoDuroOutbox;
 import com.matheus.srv_portfolio_scheduler.infrastructure.persistence.JpaDedoDuroOutboxRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.adapters.output.queries;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.CustomerMapper;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.AssetPriceRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.AssetPriceQueryRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.CustomerQueryRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio.GetCustomerPortfolioResponse;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Custody;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class CustomerQueryRepositoryAdapter implements CustomerQueryRepositoryPort {
 
     private final JpaCustomerQueryRepository customerRepository;
-    private final AssetPriceRepositoryPort assetPriceRepository;
+    private final AssetPriceQueryRepositoryPort assetPriceRepository;
 
     @Override
     public GetCustomerPortfolioResponse getCustomerPortfolio(long customerId) {

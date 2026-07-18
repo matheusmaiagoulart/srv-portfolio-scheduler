@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.service;
 
-import com.matheus.srv_portfolio_scheduler.application.ports.output.DedoDuroOutboxRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.DedoDuroOutboxRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.messaging.KafkaProducerPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.DedoDuroOutbox;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class IRDedoDuroOutboxService {
-
-    private final DedoDuroOutboxRepositoryPort dedoDuroOutboxRepository;
-    private final KafkaProducerPort kafkaProducer;
+    
     private final ObjectMapper objectMapper;
+    private final KafkaProducerPort kafkaProducer;
+    private final DedoDuroOutboxRepositoryPort dedoDuroOutboxRepository;
 
     public List<DedoDuroOutbox> createOutboxEntries(List<String> payloads) {
         return payloads.stream()

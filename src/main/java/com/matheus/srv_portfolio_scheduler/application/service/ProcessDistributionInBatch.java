@@ -1,7 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.application.service;
 
 import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ResidualsFromMaster;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.*;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.*;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Custody;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Delivery;
@@ -57,16 +57,16 @@ public class ProcessDistributionInBatch {
 
             DistributionsResultDTO distributionsResult = portfolioDistribution.distribute(purchaseOrders, purchaseRoundData, masterAccount);
 
+            deliveryRepository.saveAll(distributionsResult.deliveries());
+            custodyRepository.saveAll(distributionsResult.modifiedCustodies());
+
             responseDistributions.addAll(distributionsResult.distributions());
             responsePurchaseOrdersPerAssets.addAll(distributionsResult.purchaseOrdersPerAssets());
             responseResidualsFromMaster.addAll(distributionsResult.residualsFromMaster());
             responseDeliveries.addAll(distributionsResult.deliveries());
             modifiedCustodies.addAll(distributionsResult.modifiedCustodies());
 
-            deliveryRepository.saveAll(responseDeliveries);
-            custodyRepository.saveAll(modifiedCustodies);
-
-            List<IRDedoDuroEvent> irDedoDuroList = irDedoDuroCalculator.calculate(responseDeliveries, customersChunk);
+            List<IRDedoDuroEvent> irDedoDuroList = irDedoDuroCalculator.calculate(distributionsResult.deliveries(), customersChunk);
             dedoDuroOutboxRepository.saveAll(irDedoDuroOutboxService.createOutboxEntries(irDedoDuroList.stream().map(IRDedoDuroEvent::toString).toList()));
 
 

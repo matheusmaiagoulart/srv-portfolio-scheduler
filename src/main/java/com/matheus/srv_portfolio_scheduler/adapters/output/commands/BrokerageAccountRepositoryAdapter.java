@@ -1,9 +1,9 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output;
+package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.BrokerageAccountMapper;
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.CustomerMapper;
 import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.BrokerageAccountRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.BrokerageAccountRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Customer;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
@@ -68,8 +68,10 @@ public class BrokerageAccountRepositoryAdapter implements BrokerageAccountReposi
 
     @Override
     public Optional<BrokerageAccount> getMasterAccount() {
-        Optional<JpaBrokerageAccount> masterAccount = repository.getMasterAccount();
-        var customer = CustomerMapper.toDomain(masterAccount.get().getCustomer());
-        return Optional.of(BrokerageAccountMapper.toDomain(masterAccount.get(), customer));
+        return repository.getMasterAccount()
+                .map(brokerageAccount -> {
+                    var customer = CustomerMapper.toDomain(brokerageAccount.getCustomer());
+                    return BrokerageAccountMapper.toDomain(brokerageAccount, customer);
+                });
     }
 }

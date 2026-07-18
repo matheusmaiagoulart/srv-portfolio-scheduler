@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.application.ports.input;
+package com.matheus.srv_portfolio_scheduler.application.ports.input.commands;
 
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberResponse;

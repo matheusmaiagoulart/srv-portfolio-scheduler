@@ -1,6 +1,6 @@
-package com.matheus.srv_portfolio_scheduler.adapters;
+package com.matheus.srv_portfolio_scheduler.adapters.output.queries;
 
-import com.matheus.srv_portfolio_scheduler.application.ports.output.RedisCachePort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.RedisCachePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

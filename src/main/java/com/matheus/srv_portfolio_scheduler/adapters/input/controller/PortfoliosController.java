@@ -3,7 +3,7 @@ package com.matheus.srv_portfolio_scheduler.adapters.input.controller;
 import com.matheus.srv_portfolio_scheduler.adapters.input.swagger.SwaggerPortfoliosController;
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioResponse;
-import com.matheus.srv_portfolio_scheduler.application.ports.input.CreateRecommendedPortfolioUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.CreateRecommendedPortfolioUseCase;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -5,8 +5,8 @@ import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioP
 import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes.ImportQuotesCommand;
 import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
-import com.matheus.srv_portfolio_scheduler.application.ports.input.ExecutePortfolioPurchaseUseCase;
-import com.matheus.srv_portfolio_scheduler.application.ports.input.ImportQuotesUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ExecutePortfolioPurchaseUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ImportQuotesUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

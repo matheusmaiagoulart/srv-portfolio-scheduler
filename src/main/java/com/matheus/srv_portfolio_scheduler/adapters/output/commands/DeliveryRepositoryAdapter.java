@@ -1,7 +1,7 @@
-package com.matheus.srv_portfolio_scheduler.adapters.output;
+package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.DeliveryMapper;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.DeliveryRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.DeliveryRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Delivery;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaDelivery;
 import com.matheus.srv_portfolio_scheduler.infrastructure.persistence.JpaDeliveryRepository;

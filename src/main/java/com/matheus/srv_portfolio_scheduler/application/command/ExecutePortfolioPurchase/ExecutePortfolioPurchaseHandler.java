@@ -1,11 +1,11 @@
 package com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase;
 
 import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
-import com.matheus.srv_portfolio_scheduler.application.ports.input.ExecutePortfolioPurchaseUseCase;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.BrokerageAccountRepositoryPort;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.CustomerRepositoryPort;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.PurchaseOrderRepositoryPort;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.RecommendedPortfolioRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ExecutePortfolioPurchaseUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.BrokerageAccountRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.CustomerRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.PurchaseOrderRepositoryPort;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.RecommendedPortfolioRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.service.ProcessDistributionInBatch;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.PurchaseOrder;

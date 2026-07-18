@@ -26,10 +26,11 @@ public class Customer {
 
 
     public static Customer create(String name, String cpf, String email, BigDecimal monthlyAmount) {
-        if (name.isEmpty() || name == null) throw new BusinessException("INVALID_NAME", "Name can't be null.");
-        if (cpf.isEmpty() || cpf == null) throw new BusinessException("INVALID_CPF", "Cpf can't be null.");
-        if (email.isEmpty() || email == null) throw new BusinessException("INVALID_EMAIL", "Email can't be null.");
-        if (monthlyAmount.compareTo(BigDecimal.valueOf(100)) < 0)
+        if (name == null || name.isBlank()) throw new BusinessException("INVALID_NAME", "Name can't be null.");
+        if (cpf == null || cpf.isBlank()) throw new BusinessException("INVALID_CPF", "Cpf can't be null.");
+        if (email == null || email.isBlank()) throw new BusinessException("INVALID_EMAIL", "Email can't be null.");
+
+        if (monthlyAmount == null || monthlyAmount.compareTo(BigDecimal.valueOf(100)) < 0)
             throw new BusinessException("INVALID_MONTHLY_AMOUNT", "Monthly amount must be greater than 100.");
 
         Customer customer = Customer.builder()

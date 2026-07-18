@@ -1,7 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio;
 
-import com.matheus.srv_portfolio_scheduler.application.ports.input.GetCustomerPortfolioUseCase;
-import com.matheus.srv_portfolio_scheduler.application.ports.output.RedisCachePort;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.queries.GetCustomerPortfolioUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.RedisCachePort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.CustomerQueryRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
