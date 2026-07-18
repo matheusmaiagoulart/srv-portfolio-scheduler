@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.adapters;
+package com.matheus.srv_portfolio_scheduler.adapters.output;
 
 import com.matheus.srv_portfolio_scheduler.application.ports.output.RedisCachePort;
 import lombok.RequiredArgsConstructor;
