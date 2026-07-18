@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class AssetPrice {
 
     private long id;
-    private LocalDate TradingDate;
+    private LocalDate tradingDate;
     private String ticker;
     private Money openPrice;
     private Money closePrice;
@@ -23,7 +23,7 @@ public class AssetPrice {
     public static AssetPrice reconstruct(long id, LocalDate tradingDate, String ticker, BigDecimal openPrice, BigDecimal closePrice, BigDecimal maxPrice, BigDecimal minPrice) {
         return AssetPrice.builder()
                 .id(id)
-                .TradingDate(tradingDate)
+                .tradingDate(tradingDate)
                 .ticker(ticker)
                 .openPrice(Money.create(openPrice))
                 .closePrice(Money.create(closePrice))
@@ -34,7 +34,7 @@ public class AssetPrice {
 
     public static AssetPrice create(LocalDate tradingDate, String ticker, BigDecimal openPrice, BigDecimal closePrice, BigDecimal maxPrice, BigDecimal minPrice) {
         return AssetPrice.builder()
-                .TradingDate(tradingDate)
+                .tradingDate(tradingDate)
                 .ticker(ticker)
                 .openPrice(Money.create(openPrice))
                 .closePrice(Money.create(closePrice))
