@@ -15,7 +15,7 @@ import com.matheus.srv_portfolio_scheduler.domain.exceptions.CotahistNotFoundExc
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.MasterAccountNotFoundException;
 import com.matheus.srv_portfolio_scheduler.domain.services.PurchaseQuotesCalculator;
 import com.matheus.srv_portfolio_scheduler.domain.services.dto.AssetPurchaseDTO;
-import com.matheus.srv_portfolio_scheduler.domain.services.dto.DistributionsResultDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.PurchaseSummaryDTO;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +72,7 @@ public class ExecutePortfolioPurchaseHandler implements ExecutePortfolioPurchase
 
         purchaseOrders = purchaseOrderRepository.save(purchaseOrders);
 
-        DistributionsResultDTO resultDistribution = distributionInBatch.processInBatch(
+        PurchaseSummaryDTO resultDistribution = distributionInBatch.processInBatch(
                 purchaseOrders,
                 thirdValueOfAllCustomers,
                 masterAccount);
