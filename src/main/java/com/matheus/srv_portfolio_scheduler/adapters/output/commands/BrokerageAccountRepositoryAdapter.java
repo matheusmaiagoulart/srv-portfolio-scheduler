@@ -35,9 +35,9 @@ public class BrokerageAccountRepositoryAdapter implements BrokerageAccountReposi
         JpaBrokerageAccount brokerageEntity = BrokerageAccountMapper.toJpaEntity(brokerageAccount, customer);
 
         try {
-            JpaBrokerageAccount saveResult = repository.save(brokerageEntity);
+            JpaBrokerageAccount saveResult = repository.saveAndFlush(brokerageEntity);
 
-            Customer customerDomain = CustomerMapper.toDomain(saveResult.getCustomer());
+            Customer customerDomain = CustomerMapper.toDomainWithoutAccount(saveResult.getCustomer());
 
             return BrokerageAccountMapper.toDomain(saveResult, customerDomain);
         } catch (Exception e) {
@@ -45,7 +45,8 @@ public class BrokerageAccountRepositoryAdapter implements BrokerageAccountReposi
 
             log.error("Error while saving BrokerageAccount",
                     kv("correlationId", CorrelationId.get()),
-                    kv("errorMessage", message));
+                    kv("errorMessage", message),
+                    kv("stackTrace", e));
 
             if (message.contains("IX_customers_cpf")) throw new DuplicatedCpfException(customer.getCpf());
             if (message.contains("IX_customers_email")) throw new DuplicatedEmailException(customer.getEmail());
