@@ -16,7 +16,7 @@ public class JpaAssetPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDate TradingDate;
+    private LocalDate tradingDate;
     private String ticker;
 
     @Embedded

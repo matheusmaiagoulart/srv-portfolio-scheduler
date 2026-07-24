@@ -18,9 +18,13 @@ public class AssetPriceRepositoryAdapter implements AssetPriceRepositoryPort {
 
     @Override
     public void saveAll(List<AssetPrice> assetsPricesList) {
+        if (jpaAssetPriceRepository.existsByTradingDate(assetsPricesList.getFirst().getTradingDate())) {
+            return;
+        }
+
         List<JpaAssetPrice> jpaAssetPrices = assetsPricesList.stream()
                 .map(AssetPriceMapper::toJpaEntity).toList();
 
-        jpaAssetPriceRepository.saveAll(jpaAssetPrices);
+        jpaAssetPriceRepository.saveAllAndFlush(jpaAssetPrices);
     }
 }
