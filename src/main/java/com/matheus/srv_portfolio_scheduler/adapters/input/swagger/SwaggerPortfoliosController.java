@@ -25,5 +25,5 @@ public interface SwaggerPortfoliosController {
             description = "Retorna o histórico de cestas com 5 ações recomendadas pela corretora, " +
                     "que já foram criadas.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Ok")})
-    GetAllRecommendedPortfoliosResponse getAllRecommendedPortfolios();
+    ResponseEntity<GetAllRecommendedPortfoliosResponse> getAllRecommendedPortfolios();
 }
