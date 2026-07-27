@@ -7,6 +7,7 @@ import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.QuoteNotFoundException;
 import com.matheus.srv_portfolio_scheduler.domain.services.dto.AssetPurchaseDTO;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class PurchaseQuotesCalculator {
 
     public Map<String, Money> calculateAmountPerAsset(Money totalAmount, RecommendedPortfolio portfolio) {
@@ -56,6 +58,8 @@ public class PurchaseQuotesCalculator {
             int quantity = amount.getAmount()
                     .divide(lastClosePriceLote.getAmount(), RoundingMode.DOWN)
                     .intValue();
+
+            log.info("QUANTITY FOR TICKER {}: {}, AMOUNT USED: {}", ticker, quantity, amount.getAmount());
 
             int masterResidualQuantity = masterCustodies.getOrDefault(ticker, 0);
 

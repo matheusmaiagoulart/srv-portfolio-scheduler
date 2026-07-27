@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,7 @@ public class ProcessDistributionInBatch {
                     irDedoDuroList.stream()
                             .map(IRDedoDuroEvent::toString)
                             .toList());
+
             dedoDuroOutboxRepository.saveAll(outboxEntries);
 
             totalCustomersProcessed += customersChunk.size();
@@ -101,18 +103,26 @@ public class ProcessDistributionInBatch {
         log.info("Start updating residuals from master.");
 
         masterAccount.getCustodies().forEach(custody -> {
-            PurchaseOrder order = purchaseOrders.stream()
+            int totalQuantity = purchaseOrders.stream()
                     .filter(p -> p.getTicker().equals(custody.getTicker()))
-                    .findFirst().orElse(null);
-            if (order != null) {
+                    .mapToInt(PurchaseOrder::getQuantity)
+                    .sum();
 
+            Money price = purchaseOrders.stream()
+                    .filter(p -> p.getTicker().equals(custody.getTicker()))
+                    .map(PurchaseOrder::getUnitPrice)
+                    .findFirst()
+                    .orElse(Money.create(BigDecimal.ZERO));
+
+            if (totalQuantity > 0) {
                 int oldQuantity = custody.getQuantity();
-                custody.addPurchaseQuantity(order.getQuantity(), order.getUnitPrice());
-
+                custody.addPurchaseQuantity(totalQuantity, price);
                 log.info("Master Custody: {} from {} to {}", custody.getTicker(), oldQuantity, custody.getQuantity());
             }
-            log.info("Finished updating residuals from master.");
         });
+
+        log.info("Finished updating residuals from master.");
+
     }
 
     private List<ResidualsFromMaster> getResidualsFromMaster(BrokerageAccount masterAccount) {

@@ -38,7 +38,7 @@ public class PurchaseOrder {
             purchaseOrders.add(PurchaseOrder.builder()
                     .masterAccountId(masterAccountId)
                     .ticker(asset.ticker())
-                    .quantity(asset.marketType().loteQuantity())
+                    .quantity(asset.marketType().loteQuantity() * 100)
                     .unitPrice(asset.lastClosePriceLote())
                     .marketType(MarketType.BATCH)
                     .executionDate(OffsetDateTime.now())

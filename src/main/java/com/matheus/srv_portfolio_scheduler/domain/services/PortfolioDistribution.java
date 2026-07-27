@@ -82,10 +82,6 @@ public class PortfolioDistribution {
                 distributionsToCustomer.add(new DistributionsPerAsset(custody.getTicker(), quantityToDistribute));
                 distributedPerTicker.put(custody.getTicker(), distributedPerTicker.get(custody.getTicker()) + quantityToDistribute);
 
-                log.info("Creating delivery with purchaseOrderId: {}, ticker: {}",
-                        context.totalPerTicker().get(custody.getTicker()).purchaseId(),
-                        custody.getTicker());
-
                 responseDeliveries.add(
                         Delivery.createDelivery(
                                 context.totalPerTicker().get(custody.getTicker()).purchaseId(),
