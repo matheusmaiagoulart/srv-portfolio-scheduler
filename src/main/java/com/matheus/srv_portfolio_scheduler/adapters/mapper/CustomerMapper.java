@@ -32,4 +32,16 @@ public class CustomerMapper {
         return domainCustomer;
 
     }
+
+    public static Customer toDomainWithoutAccount(JpaCustomer customer) {
+        return Customer.reconstruct(
+                customer.getId(),
+                customer.getName(),
+                customer.getCpf(),
+                customer.getEmail(),
+                customer.getMonthlyAmount(),
+                customer.isActive(),
+                customer.getJoiningDate()
+        );
+    }
 }

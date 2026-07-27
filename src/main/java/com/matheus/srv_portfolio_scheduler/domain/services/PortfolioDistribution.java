@@ -1,6 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.domain.services;
 
-import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ResidualsFromMaster;
+import com.matheus.srv_portfolio_scheduler.application.dto.DistributionContext;
+import com.matheus.srv_portfolio_scheduler.application.dto.DistributionOutput;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Custody;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Delivery;
@@ -14,24 +15,26 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class PortfolioDistribution {
 
-    public DistributionsResultDTO distribute(List<PurchaseOrder> purchaseOrders, PurchaseRoundDataDTO purchaseRoundData, BrokerageAccount masterAccount) {
+    public DistributionsResultDTO distribute(List<PurchaseOrder> purchaseOrders, PurchaseRoundDataDTO purchaseRoundData, BrokerageAccount masterAccount, Map<String, TickerData> fixedTotalPerTicker) {
 
+        DistributionContext context = buildContext(purchaseOrders, masterAccount, fixedTotalPerTicker);
 
-        DistributionContext context = buildContext(purchaseOrders, masterAccount);
-        log.info("Starting distribution process for purchase orders: {}, TotalAmount: {}, Residuals from Master: {}",
-                purchaseOrders, purchaseRoundData.totalPurchaseAmount(), context.masterCustodies);
+        log.info("Starting distribution process for purchase orders: {}, TotalAmount: {}, Master custodies: {}",
+                purchaseOrders.stream().map(p -> p.getTicker() + "=" + p.getQuantity()).toList(),
+                purchaseRoundData.totalPurchaseAmount().getAmount(),
+                context.masterCustodies().entrySet().stream()
+                        .map(e -> e.getKey() + "=" + e.getValue().getQuantity())
+                        .toList());
 
         if (purchaseRoundData.totalPurchaseAmount().getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             log.info("No purchase amount to distribute. Returning empty distributions.");
             return new DistributionsResultDTO(
-                    createResponseForAssetsPurchased(purchaseOrders, context.masterCustodies),
-                    new ArrayList<>(),
+                    createResponseForAssetsPurchased(purchaseOrders),
                     new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>());
@@ -39,24 +42,11 @@ public class PortfolioDistribution {
 
         DistributionOutput distributionOutput = distributeToCustomers(purchaseRoundData, context);
 
-        List<ResidualsFromMaster> residualsFromMaster = updateResidualsFromMaster(
-                distributionOutput.distributedPerTicker,
-                context.totalPerTicker, masterAccount);
-
-        return new DistributionsResultDTO(createResponseForAssetsPurchased(purchaseOrders, context.masterCustodies),
-                distributionOutput.distributions,
-                residualsFromMaster,
-                distributionOutput.deliveries,
-                distributionOutput.modifiedCustodies);
-    }
-
-    private DistributionContext buildContext(List<PurchaseOrder> purchaseOrders, BrokerageAccount masterAccount) {
-        Map<String, Custody> masterCustodies = getMasterCustodies(masterAccount);
-        Map<String, Integer> distributedPerTicker = buildDistributedPerTicker(masterAccount);
-        Map<String, TickerData> purchasedPerTicker = buildPurchasedPerTicker(purchaseOrders);
-        Map<String, TickerData> totalPerTicker = buildTotalQuantityPerTickerToDistribute(purchasedPerTicker, masterAccount);
-
-        return new DistributionContext(masterCustodies, distributedPerTicker, purchasedPerTicker, totalPerTicker);
+        return new DistributionsResultDTO(
+                createResponseForAssetsPurchased(purchaseOrders),
+                distributionOutput.distributions(),
+                distributionOutput.deliveries(),
+                distributionOutput.modifiedCustodies());
     }
 
     private DistributionOutput distributeToCustomers(PurchaseRoundDataDTO purchaseRoundData, DistributionContext context) {
@@ -73,22 +63,21 @@ public class PortfolioDistribution {
             List<Custody> customerCustodies = customer.customerCustodies().getCustodies();
             List<DistributionsPerAsset> distributionsToCustomer = new ArrayList<>();
 
-            BigDecimal proportion = customer.thirdPartyBalance().getAmount()
-                    .divide(purchaseRoundData.totalPurchaseAmount().getAmount(), 2, RoundingMode.HALF_DOWN);
-
             customerCustodies.forEach(custody -> {
                 Money tickerPrice = context.totalPerTicker().get(custody.getTicker()).assetPrice();
                 int tickerQuantity = context.totalPerTicker().get(custody.getTicker()).totalQuantity();
 
-                int quantityToDistribute = BigDecimal.valueOf(tickerQuantity)
-                        .multiply(proportion)
-                        .setScale(0, RoundingMode.DOWN)
+                int quantityToDistribute = customer.thirdPartyBalance().getAmount()
+                        .multiply(BigDecimal.valueOf(tickerQuantity))
+                        .divide(purchaseRoundData.totalPurchaseAmount().getAmount(), 0, RoundingMode.DOWN)
                         .intValue();
 
                 if (quantityToDistribute <= 0) return;
 
                 custody.addPurchaseQuantity(quantityToDistribute, tickerPrice);
                 modifiedCustodies.add(custody);
+
+                context.masterCustodies().get(custody.getTicker()).subtractQuantity(quantityToDistribute);
 
                 distributionsToCustomer.add(new DistributionsPerAsset(custody.getTicker(), quantityToDistribute));
                 distributedPerTicker.put(custody.getTicker(), distributedPerTicker.get(custody.getTicker()) + quantityToDistribute);
@@ -118,38 +107,21 @@ public class PortfolioDistribution {
         return new DistributionOutput(responseDeliveries, responseDistributions, distributedPerTicker, modifiedCustodies);
     }
 
-    private List<ResidualsFromMaster> updateResidualsFromMaster(Map<String, Integer> distributedPerTicker, Map<String, TickerData> totalQuantityPerTickerToDistribute, BrokerageAccount masterAccount) {
-        log.info("Start updating residuals from master.");
-
-        List<ResidualsFromMaster> result = masterAccount.getCustodies().stream()
-                .map(custody -> {
-                    int totalQuantity = totalQuantityPerTickerToDistribute.get(custody.getTicker()).totalQuantity();
-                    int distributedQuantity = distributedPerTicker.get(custody.getTicker());
-                    int residualQuantity = totalQuantity - distributedQuantity;
-
-                    if (residualQuantity <= 0) {
-                        log.info("Residual quantity for ticker {} is zero or negative ({}). No update needed.", custody.getTicker(), residualQuantity);
-                        return null;
-                    }
-
-                    log.info("Master Custody: {} from {} to {}", custody.getTicker(), custody.getQuantity(), residualQuantity);
-                    custody.updateResidualQuantity(residualQuantity, totalQuantityPerTickerToDistribute.get(custody.getTicker()).assetPrice(), masterAccount.getAccountType());
-                    return new ResidualsFromMaster(custody.getTicker(), residualQuantity);
-                })
-                .filter(Objects::nonNull)
-                .toList();
-
-        log.info("Finished updating residuals from master.");
-        return result;
-    }
-
-    private Map<String, Custody> getMasterCustodies(BrokerageAccount masterAccount) {
-        return masterAccount.getCustodies().stream().collect(Collectors.toMap(
-                Custody::getTicker,
-                custody -> custody));
-    }
-
     // BUILD METHODS
+
+    public Map<String, TickerData> buildInitialTotalPerTicker(List<PurchaseOrder> purchaseOrders, BrokerageAccount masterAccount) {
+        Map<String, TickerData> purchasedPerTicker = buildPurchasedPerTicker(purchaseOrders);
+        return buildTotalQuantityPerTickerToDistribute(purchasedPerTicker, masterAccount);
+    }
+
+    private DistributionContext buildContext(List<PurchaseOrder> purchaseOrders, BrokerageAccount masterAccount, Map<String, TickerData> fixedTotalPerTicker) {
+        Map<String, Custody> masterCustodies = getMasterCustodies(masterAccount);
+        Map<String, Integer> distributedPerTicker = buildDistributedPerTicker(masterAccount);
+        Map<String, TickerData> purchasedPerTicker = buildPurchasedPerTicker(purchaseOrders);
+
+        return new DistributionContext(masterCustodies, distributedPerTicker, purchasedPerTicker, fixedTotalPerTicker);
+    }
+
     private Map<String, TickerData> buildPurchasedPerTicker(List<PurchaseOrder> purchaseOrders) {
         return purchaseOrders.stream().collect(Collectors.toMap(
                 PurchaseOrder::getTicker, // KEY
@@ -171,7 +143,7 @@ public class PortfolioDistribution {
                             var purchasedTicker = purchasedTickers.get(custody.getTicker());
                             return new TickerData(
                                     purchasedTicker != null ? purchasedTicker.purchaseId() : 0L,
-                                    purchasedTicker != null ? custody.getQuantity() + purchasedTicker.totalQuantity() : 0,
+                                    custody.getQuantity(),
                                     purchasedTicker != null ? purchasedTicker.assetPrice() : custody.getAveragePrice());
                         })
                 );
@@ -184,8 +156,13 @@ public class PortfolioDistribution {
                         custody -> 0));
     }
 
-    // RESPONSE METHODS
-    private List<PurchaseOrdersPerAsset> createResponseForAssetsPurchased(List<PurchaseOrder> purchasedAssets, Map<String, Custody> residualsFromMaster) {
+    private Map<String, Custody> getMasterCustodies(BrokerageAccount masterAccount) {
+        return masterAccount.getCustodies().stream().collect(Collectors.toMap(
+                Custody::getTicker,
+                custody -> custody));
+    }
+
+    private List<PurchaseOrdersPerAsset> createResponseForAssetsPurchased(List<PurchaseOrder> purchasedAssets) {
         return purchasedAssets.stream()
                 .map(assetOrder -> new PurchaseOrdersPerAsset(
                         assetOrder.getTicker(),
@@ -193,26 +170,8 @@ public class PortfolioDistribution {
                         new PurchaseOrdersPerAssetDetails(
                                 assetOrder.getMarketType().toString(),
                                 assetOrder.getTicker(),
-                                assetOrder.getQuantity()
-                        ),
+                                assetOrder.getQuantity()),
                         assetOrder.getUnitPrice())
                 ).collect(Collectors.toList());
-    }
-
-    // CONTEXT DATA NECESSARY TO PROCESS DISTRIBUTION
-    private record DistributionContext(
-            Map<String, Custody> masterCustodies,
-            Map<String, Integer> distributedPerTicker,
-            Map<String, TickerData> purchasedPerTicker,
-            Map<String, TickerData> totalPerTicker
-    ) {
-    }
-
-    private record DistributionOutput(
-            List<Delivery> deliveries,
-            List<Distributions> distributions,
-            Map<String, Integer> distributedPerTicker,
-            List<Custody> modifiedCustodies
-    ) {
     }
 }

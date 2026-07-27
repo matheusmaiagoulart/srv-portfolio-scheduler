@@ -9,7 +9,6 @@ import com.matheus.srv_portfolio_scheduler.application.queries.GetAllRecommended
 import com.matheus.srv_portfolio_scheduler.application.queries.GetAllRecommendedPortfolios.GetAllRecommendedPortfoliosResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +30,7 @@ public class PortfoliosController implements SwaggerPortfoliosController {
 
     @Override
     @GetMapping("historico")
-    public GetAllRecommendedPortfoliosResponse getAllRecommendedPortfolios() {
-        return getAllRecommendedPortfoliosUseCase.handler(new GetAllRecommendedPortfoliosQuery());
+    public ResponseEntity<GetAllRecommendedPortfoliosResponse> getAllRecommendedPortfolios() {
+        return ResponseEntity.status(200).body(getAllRecommendedPortfoliosUseCase.handler(new GetAllRecommendedPortfoliosQuery()));
     }
 }

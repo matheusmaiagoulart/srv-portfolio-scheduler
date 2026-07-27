@@ -7,7 +7,7 @@ public class AssetPriceMapper {
 
     public static JpaAssetPrice toJpaEntity(AssetPrice assetPrice) {
         return JpaAssetPrice.builder()
-                .TradingDate(assetPrice.getTradingDate())
+                .tradingDate(assetPrice.getTradingDate())
                 .ticker(assetPrice.getTicker())
                 .openPrice(assetPrice.getOpenPrice())
                 .closePrice(assetPrice.getClosePrice())

@@ -19,7 +19,7 @@ public class JpaPurchaseOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private long masterAccountId;
     private String ticker;
     private int quantity;

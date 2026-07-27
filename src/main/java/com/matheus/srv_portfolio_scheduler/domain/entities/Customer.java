@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Customer {
 
-    private long id;
+    private Long id;
     private String name;
     private String cpf;
     private String email;
@@ -34,6 +34,7 @@ public class Customer {
             throw new BusinessException("INVALID_MONTHLY_AMOUNT", "Monthly amount must be greater than 100.");
 
         Customer customer = Customer.builder()
+                .id(null)
                 .name(name)
                 .cpf(cpf)
                 .email(email)
@@ -47,7 +48,7 @@ public class Customer {
         return customer;
     }
 
-    public static Customer reconstruct(long id, String name, String cpf, String email, Money monthlyAmount, boolean active, OffsetDateTime joiningDate) {
+    public static Customer reconstruct(Long id, String name, String cpf, String email, Money monthlyAmount, boolean active, OffsetDateTime joiningDate) {
         return Customer.builder()
                 .id(id)
                 .name(name)

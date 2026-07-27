@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BrokerageAccount {
 
-    private long id;
+    private Long id;
 
     private Customer customer;
 
@@ -30,6 +30,7 @@ public class BrokerageAccount {
 
     public static BrokerageAccount create(Customer customer) {
         return BrokerageAccount.builder()
+                .id(null)
                 .customer(customer)
                 .accountNumber(generateAccountNumber())
                 .accountType(BrokerageAccountType.CLIENT)

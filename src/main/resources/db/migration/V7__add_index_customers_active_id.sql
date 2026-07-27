@@ -1,0 +1,1 @@
+CREATE INDEX IX_customers_active_id ON customers(active, id);

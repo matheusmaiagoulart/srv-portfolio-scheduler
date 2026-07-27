@@ -5,7 +5,7 @@ import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 
 public record RegisterCustomerSubscriberResponse(
-        long id,
+        Long id,
         String name,
         String message,
         Money monthlyAmount,

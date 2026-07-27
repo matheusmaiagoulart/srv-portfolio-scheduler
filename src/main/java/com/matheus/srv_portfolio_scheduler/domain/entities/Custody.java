@@ -52,7 +52,7 @@ public class Custody {
 
     public void updateAveragePrice(int newQuantity, Money newPrice) {
         int totalQuantity = this.quantity + newQuantity;
-        if (totalQuantity == 0) this.averagePrice = Money.create(BigDecimal.ZERO);
+        if (totalQuantity == 0) return;
 
         // (averagePrice * quantity) + (newPrice * newQuantity) / totalQuantity
         BigDecimal newAveragePrice = (averagePrice.getAmount().multiply(BigDecimal.valueOf(quantity)))
@@ -68,6 +68,14 @@ public class Custody {
             updateAveragePrice(residualQuantity, price);
             this.lastUpdate = OffsetDateTime.now();
         }
+    }
+
+    public void subtractQuantity(int quantity) {
+        if (quantity > this.quantity) {
+            throw new IllegalArgumentException("Cannot subtract more than the current quantity.");
+        }
+        this.quantity -= quantity;
+        this.lastUpdate = OffsetDateTime.now();
     }
 
     /**

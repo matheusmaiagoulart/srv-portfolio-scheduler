@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PurchaseOrder {
 
-    private long id;
+    private Long id;
     private long masterAccountId;
     private String ticker;
     private int quantity;
@@ -35,23 +35,21 @@ public class PurchaseOrder {
 
         assetPurchaseList.forEach(asset -> {
 
-            if (asset.marketType().loteQuantity() > 0) {
-                purchaseOrders.add(PurchaseOrder.builder()
-                        .masterAccountId(masterAccountId)
-                        .ticker(asset.ticker())
-                        .quantity(asset.quantityToBuy())
-                        .unitPrice(asset.lastClosePriceLote())
-                        .marketType(MarketType.BATCH)
-                        .executionDate(OffsetDateTime.now())
-                        .deliveries(Collections.emptyList())
-                        .build());
-            }
+            purchaseOrders.add(PurchaseOrder.builder()
+                    .masterAccountId(masterAccountId)
+                    .ticker(asset.ticker())
+                    .quantity(asset.marketType().loteQuantity() * 100)
+                    .unitPrice(asset.lastClosePriceLote())
+                    .marketType(MarketType.BATCH)
+                    .executionDate(OffsetDateTime.now())
+                    .deliveries(Collections.emptyList())
+                    .build());
 
             if (asset.marketType().fractionalQuantity() > 0) {
                 purchaseOrders.add(PurchaseOrder.builder()
                         .masterAccountId(masterAccountId)
                         .ticker(asset.ticker())
-                        .quantity(asset.quantityToBuy())
+                        .quantity(asset.marketType().fractionalQuantity())
                         .unitPrice(asset.lastClosePriceLote())
                         .marketType(MarketType.FRACTIONAL)
                         .executionDate(OffsetDateTime.now())
@@ -62,9 +60,8 @@ public class PurchaseOrder {
         return purchaseOrders;
     }
 
-    public static PurchaseOrder reconstruct(long id, long masterAccountId, String ticker, int quantity,
-            Money unitPrice, MarketType marketType, OffsetDateTime executionDate,
-            List<Delivery> deliveries) {
+    public static PurchaseOrder reconstruct(Long id, long masterAccountId, String ticker, int quantity, Money unitPrice,
+            MarketType marketType, OffsetDateTime executionDate, List<Delivery> deliveries) {
         return PurchaseOrder.builder()
                 .id(id)
                 .masterAccountId(masterAccountId)
