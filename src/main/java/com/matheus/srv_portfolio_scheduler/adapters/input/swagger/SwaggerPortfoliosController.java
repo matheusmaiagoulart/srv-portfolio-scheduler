@@ -3,6 +3,7 @@ package com.matheus.srv_portfolio_scheduler.adapters.input.swagger;
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioResponse;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetAllRecommendedPortfolios.GetAllRecommendedPortfoliosResponse;
+import com.matheus.srv_portfolio_scheduler.application.queries.GetCurrentRecommendedPortfolio.GetCurrentRecommendedPortfolioResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -53,4 +54,17 @@ public interface SwaggerPortfoliosController {
                     content = @Content(mediaType = "application/json"))
     })
     ResponseEntity<GetAllRecommendedPortfoliosResponse> getAllRecommendedPortfolios();
+
+    @Operation(
+            summary = "Cesta atual de ações recomendadas",
+            description = "Retorna a cesta de ações recomendadas atualmente vigente."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cesta atual retornada com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetCurrentRecommendedPortfolioResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.",
+                    content = @Content(mediaType = "application/json"))
+    })
+    ResponseEntity<GetCurrentRecommendedPortfolioResponse> getCurrentRecommendedPortfolio();
 }

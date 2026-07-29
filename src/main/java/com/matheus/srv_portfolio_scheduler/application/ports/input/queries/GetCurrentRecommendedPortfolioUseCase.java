@@ -1,0 +1,8 @@
+package com.matheus.srv_portfolio_scheduler.application.ports.input.queries;
+
+import com.matheus.srv_portfolio_scheduler.application.queries.GetCurrentRecommendedPortfolio.GetCurrentRecommendedPortfolioQuery;
+import com.matheus.srv_portfolio_scheduler.application.queries.GetCurrentRecommendedPortfolio.GetCurrentRecommendedPortfolioResponse;
+
+public interface GetCurrentRecommendedPortfolioUseCase {
+    GetCurrentRecommendedPortfolioResponse handler(GetCurrentRecommendedPortfolioQuery query);
+}
