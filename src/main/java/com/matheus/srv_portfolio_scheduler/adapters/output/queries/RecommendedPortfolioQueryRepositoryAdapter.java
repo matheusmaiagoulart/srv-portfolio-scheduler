@@ -6,6 +6,7 @@ import com.matheus.srv_portfolio_scheduler.application.queries.GetAllRecommended
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCurrentRecommendedPortfolio.GetCurrentRecommendedPortfolioResponse;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.ActivePortfolioNotFoundException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.LatestTradingDateNotFoundException;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaAssetPrice;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaRecommendedPortfolio;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -58,13 +58,14 @@ public class RecommendedPortfolioQueryRepositoryAdapter implements RecommendedPo
         JpaRecommendedPortfolio currentPortfolio = repository.getJpaRecommendedPortfolioByActiveTrue()
                 .orElseThrow(ActivePortfolioNotFoundException::new);
 
-        LocalDate latestTradingDate = assetPriceRepository.getLatestTradingDate();
+        LocalDate latestTradingDate = assetPriceRepository.getLatestTradingDate()
+                .orElseThrow(LatestTradingDateNotFoundException::new);
 
         Map<String, BigDecimal> assetsPrices = assetPriceRepository.getJpaAssetPriceByTradingDate(latestTradingDate)
                 .stream()
                 .collect(Collectors.toMap(
                         JpaAssetPrice::getTicker,
-                        JpaAssetPrice -> JpaAssetPrice.getClosePrice().getAmount()));
+                        jpaAssetPrice -> jpaAssetPrice.getClosePrice().getAmount()));
 
         return new GetCurrentRecommendedPortfolioResponse(
                 currentPortfolio.getId(),

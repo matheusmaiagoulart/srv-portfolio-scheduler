@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaAssetPriceQueryRepository extends JpaRepository<JpaAssetPrice, Long> {
 
@@ -23,7 +23,7 @@ public interface JpaAssetPriceQueryRepository extends JpaRepository<JpaAssetPric
     SELECT MAX(a.tradingDate)
             FROM asset_prices a
     """)
-    LocalDate getLatestTradingDate();
+    Optional<LocalDate> getLatestTradingDate();
 
     @Query("""
     SELECT a
