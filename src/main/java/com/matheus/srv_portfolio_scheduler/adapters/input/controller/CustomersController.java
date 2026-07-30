@@ -1,8 +1,11 @@
 package com.matheus.srv_portfolio_scheduler.adapters.input.controller;
 
 import com.matheus.srv_portfolio_scheduler.adapters.input.swagger.SwaggerCustomersController;
+import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberResponse;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.DisableCustomerSubscriptionUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.queries.GetCustomerPortfolioUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.RegisterCustomerSubscriberUseCase;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio.GetCustomerPortfolioQuery;
@@ -19,6 +22,7 @@ public class CustomersController implements SwaggerCustomersController {
 
     private final GetCustomerPortfolioUseCase getCustomerPortfolioUseCase;
     private final RegisterCustomerSubscriberUseCase registerCustomerSubscriberUseCase;
+    private final DisableCustomerSubscriptionUseCase disableCustomerSubscriptionUseCase;
 
     @Override
     @PostMapping("adesao")
@@ -27,9 +31,15 @@ public class CustomersController implements SwaggerCustomersController {
         return ResponseEntity.status(201).body(registerCustomerSubscriberUseCase.handler(command));
     }
 
+    @Override
     @GetMapping("{id}/carteira")
     public ResponseEntity<GetCustomerPortfolioResponse> getCustomerPortfolio(@PathVariable long id) {
-
         return ResponseEntity.ok(getCustomerPortfolioUseCase.handler(new GetCustomerPortfolioQuery(id)));
+    }
+
+    @Override
+    @PatchMapping("{customerId}/desativar")
+    public ResponseEntity<DisableCustomerSubscriptionResponse> disableCustomerSubscription(@PathVariable long customerId) {
+        return ResponseEntity.ok(disableCustomerSubscriptionUseCase.handler(new DisableCustomerSubscriptionCommand(customerId)));
     }
 }

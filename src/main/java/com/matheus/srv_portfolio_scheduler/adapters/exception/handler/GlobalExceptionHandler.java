@@ -84,6 +84,14 @@ public class GlobalExceptionHandler {
                 .status(httpStatus)
                 .body(new ExceptionResponse(httpStatus.value(), ex.getErrorCode(), ex.getMessage()));
     }
+
+    @ExceptionHandler(CustomerAlreadyInactiveException.class)
+    public ResponseEntity<ExceptionResponse> customerAlreadyInactiveException(CustomerAlreadyInactiveException ex) {
+        return ResponseEntity
+                .status(422)
+                .body(new ExceptionResponse(422, ex.getErrorCode(), ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         var errors = new HashMap<String, String>();

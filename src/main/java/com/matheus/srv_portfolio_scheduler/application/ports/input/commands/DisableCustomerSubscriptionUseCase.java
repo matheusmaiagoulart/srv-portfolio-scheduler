@@ -1,0 +1,10 @@
+package com.matheus.srv_portfolio_scheduler.application.ports.input.commands;
+
+import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionResponse;
+
+public interface DisableCustomerSubscriptionUseCase {
+
+    DisableCustomerSubscriptionResponse handler(DisableCustomerSubscriptionCommand command);
+}
+
