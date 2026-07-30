@@ -5,7 +5,10 @@ import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSu
 import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberResponse;
+import com.matheus.srv_portfolio_scheduler.application.command.UpdateMonthlyAmount.UpdateMonthlyAmountCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.UpdateMonthlyAmount.UpdateMonthlyAmountResponse;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.DisableCustomerSubscriptionUseCase;
+import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.UpdateMonthlyAmountUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.queries.GetCustomerPortfolioUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.RegisterCustomerSubscriberUseCase;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio.GetCustomerPortfolioQuery;
@@ -23,6 +26,7 @@ public class CustomersController implements SwaggerCustomersController {
     private final GetCustomerPortfolioUseCase getCustomerPortfolioUseCase;
     private final RegisterCustomerSubscriberUseCase registerCustomerSubscriberUseCase;
     private final DisableCustomerSubscriptionUseCase disableCustomerSubscriptionUseCase;
+    private final UpdateMonthlyAmountUseCase updateMonthlyAmountUseCase;
 
     @Override
     @PostMapping("adesao")
@@ -41,5 +45,13 @@ public class CustomersController implements SwaggerCustomersController {
     @PatchMapping("{customerId}/desativar")
     public ResponseEntity<DisableCustomerSubscriptionResponse> disableCustomerSubscription(@PathVariable long customerId) {
         return ResponseEntity.ok(disableCustomerSubscriptionUseCase.handler(new DisableCustomerSubscriptionCommand(customerId)));
+    }
+
+    @Override
+    @PatchMapping("{customerId}/valor-mensal")
+    public ResponseEntity<UpdateMonthlyAmountResponse> updateMonthlyAmount(
+            @PathVariable long customerId,
+            @RequestBody @Valid UpdateMonthlyAmountCommand command) {
+        return ResponseEntity.ok(updateMonthlyAmountUseCase.handler(customerId, command));
     }
 }

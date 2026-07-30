@@ -3,6 +3,8 @@ package com.matheus.srv_portfolio_scheduler.adapters.input.swagger;
 import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberResponse;
+import com.matheus.srv_portfolio_scheduler.application.command.UpdateMonthlyAmount.UpdateMonthlyAmountCommand;
+import com.matheus.srv_portfolio_scheduler.application.command.UpdateMonthlyAmount.UpdateMonthlyAmountResponse;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio.GetCustomerPortfolioResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -85,4 +87,27 @@ public interface SwaggerCustomersController {
     ResponseEntity<DisableCustomerSubscriptionResponse> disableCustomerSubscription(
             @Parameter(description = "ID único do cliente.", required = true, example = "22")
             @PathVariable long customerId);
+
+    @Operation(
+            summary = "Atualização do valor mensal do cliente",
+            description = """
+                    Atualiza o valor mensal de aporte do cliente. \
+                    O novo valor será considerado a partir do próximo ciclo de compra.
+                    """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Valor mensal atualizado com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UpdateMonthlyAmountResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Valor inválido ou menor que 100.",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado.",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.",
+                    content = @Content(mediaType = "application/json"))
+    })
+    ResponseEntity<UpdateMonthlyAmountResponse> updateMonthlyAmount(
+            @Parameter(description = "ID único do cliente.", required = true, example = "20")
+            @PathVariable long customerId,
+            @RequestBody @Valid UpdateMonthlyAmountCommand command);
 }
