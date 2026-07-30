@@ -49,6 +49,12 @@ public class Customer {
         return customer;
     }
 
+    public void updateMonthlyAmount(Money newMonthlyAmount) {
+        if (newMonthlyAmount == null || newMonthlyAmount.getAmount().compareTo(BigDecimal.valueOf(100)) < 0)
+            throw new BusinessException("INVALID_MONTHLY_AMOUNT", "Monthly amount must be greater than 100.");
+        this.monthlyAmount = newMonthlyAmount;
+    }
+
     public void disable() {
         if (!this.active) throw new CustomerAlreadyInactiveException(this.id);
         this.active = false;
