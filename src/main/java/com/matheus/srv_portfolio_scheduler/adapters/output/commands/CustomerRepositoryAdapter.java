@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -26,6 +27,12 @@ public class CustomerRepositoryAdapter implements CustomerRepositoryPort {
     @Override
     public void save(Customer customer) {
         jpaCustomerRepository.save(CustomerMapper.toJpaEntity(customer));
+    }
+
+    @Override
+    public Optional<Customer> findById(long customerId) {
+        return jpaCustomerRepository.findById(customerId)
+                .map(CustomerMapper::toDomain);
     }
 
     @Override

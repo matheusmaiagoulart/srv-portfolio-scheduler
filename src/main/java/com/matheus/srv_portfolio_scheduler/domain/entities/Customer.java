@@ -1,6 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.domain.entities;
 
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.CustomerAlreadyInactiveException;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 import lombok.*;
 
@@ -46,6 +47,11 @@ public class Customer {
         customer.brokerageAccount = BrokerageAccount.create(customer);
 
         return customer;
+    }
+
+    public void disable() {
+        if (!this.active) throw new CustomerAlreadyInactiveException(this.id);
+        this.active = false;
     }
 
     public static Customer reconstruct(Long id, String name, String cpf, String email, Money monthlyAmount, boolean active, OffsetDateTime joiningDate) {

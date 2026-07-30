@@ -1,5 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.input.swagger;
 
+import com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription.DisableCustomerSubscriptionResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber.RegisterCustomerSubscriberResponse;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCustomerPortfolio.GetCustomerPortfolioResponse;
@@ -62,4 +63,26 @@ public interface SwaggerCustomersController {
     ResponseEntity<GetCustomerPortfolioResponse> getCustomerPortfolio(
             @Parameter(description = "ID único do cliente.", required = true, example = "22")
             @PathVariable long id);
+
+    @Operation(
+            summary = "Desativação de assinatura do cliente",
+            description = """
+                    Desativa a assinatura do cliente na plataforma, impedindo que o mesmo \
+                    participe dos próximos ciclos automáticos de compra de ações.
+                    """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Assinatura desativada com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DisableCustomerSubscriptionResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado.",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "422", description = "Cliente já está inativo.",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor.",
+                    content = @Content(mediaType = "application/json"))
+    })
+    ResponseEntity<DisableCustomerSubscriptionResponse> disableCustomerSubscription(
+            @Parameter(description = "ID único do cliente.", required = true, example = "22")
+            @PathVariable long customerId);
 }
