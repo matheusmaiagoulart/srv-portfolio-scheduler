@@ -1,9 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.config;
 
-import com.matheus.srv_portfolio_scheduler.domain.services.IRDedoDuroCalculator;
-import com.matheus.srv_portfolio_scheduler.domain.services.PortfolioDistribution;
-import com.matheus.srv_portfolio_scheduler.domain.services.PurchaseExecutionDateValidator;
-import com.matheus.srv_portfolio_scheduler.domain.services.PurchaseQuotesCalculator;
+import com.matheus.srv_portfolio_scheduler.domain.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,5 +25,10 @@ public class DomainServicesConfiguration {
     @Bean
     public IRDedoDuroCalculator irDedoDuroCalculator() {
         return new IRDedoDuroCalculator();
+    }
+
+    @Bean
+    public PortfolioComparisonService portfolioComparisonService() {
+        return new PortfolioComparisonService();
     }
 }
