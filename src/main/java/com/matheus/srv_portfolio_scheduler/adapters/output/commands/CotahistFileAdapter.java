@@ -14,10 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -27,7 +24,7 @@ public class CotahistFileAdapter implements CotahistFilePort {
     private String cotahistPath;
 
     @Override
-    public List<QuoteDTO> parse(HashSet<String> tickers, String pathFile) {
+    public List<QuoteDTO> parse(Set<String> tickers, String pathFile) {
         List<QuoteDTO> quotes = new ArrayList<>();
 
         Path path = Paths.get(pathFile);
@@ -54,8 +51,6 @@ public class CotahistFileAdapter implements CotahistFilePort {
                     if (!tickers.contains(ticker)) continue;
                 }
 
-
-
                 QuoteDTO quote = new QuoteDTO(
                         parseDate(line.substring(2, 10)),
                         ticker,
@@ -80,19 +75,41 @@ public class CotahistFileAdapter implements CotahistFilePort {
         return quotes;
     }
 
-
     private BigDecimal parsePrice(String price) {
         BigDecimal value = BigDecimal.valueOf(Long.parseLong(price.trim()));
         return value.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
+
     private LocalDate parseDate (String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         return LocalDate.parse(date, formatter);
     }
 
     @Override
-    public List<QuoteDTO> getTickerByLastCotahist(HashSet<String> tickers) {
-        return List.of();
+    public List<QuoteDTO> getTickerByLastCotahist(Set<String> tickers) {
+
+        try (var stream = Files.list(Paths.get(cotahistPath))) {
+            Optional<Path> latestFile = stream
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().toUpperCase().endsWith(".TXT"))
+                    .max((p1, p2) -> {
+                        try {
+                            return Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2));
+                        } catch (IOException e) {
+                            throw new RuntimeException("Erro ao comparar data de modificacao dos arquivos", e);
+                        }
+                    });
+
+            if (latestFile.isEmpty()) {
+                log.warn("Nenhum arquivo .TXT encontrado em {}", cotahistPath);
+                return List.of();
+            }
+
+            return parse(tickers, latestFile.get().toString());
+        } catch (IOException e) {
+            log.error("Erro ao listar arquivos em {}", cotahistPath, e);
+            throw new RuntimeException("Falha ao buscar ultimo arquivo cotahist", e);
+        }
     }
 
     @Override
