@@ -33,4 +33,12 @@ public class Money {
 
         return new Money(this.amount.add(other.getAmount()));
     }
+
+    public Money multiply(BigDecimal multiplier) {
+        return new Money(this.amount.multiply(multiplier));
+    }
+
+    public Money divide(BigDecimal divider) {
+        return new Money(this.amount.divide(divider, SCALE, ROUNDING_MODE));
+    }
 }
