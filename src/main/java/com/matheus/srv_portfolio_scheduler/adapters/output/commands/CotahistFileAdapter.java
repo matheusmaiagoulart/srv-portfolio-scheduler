@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
-import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.QuoteDTO;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.CotahistFilePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,7 +88,7 @@ public class CotahistFileAdapter implements CotahistFilePort {
     @Override
     public List<QuoteDTO> getTickerByLastCotahist(Set<String> tickers) {
 
-        try (var stream = Files.list(Paths.get(cotahistPath))) {
+        try (var stream = Files.list(Paths.get("cotahist/"))) {
             Optional<Path> latestFile = stream
                     .filter(Files::isRegularFile)
                     .filter(p -> p.getFileName().toString().toUpperCase().endsWith(".TXT"))

@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.ports.output.commands;
 
-import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.QuoteDTO;
 
 import java.time.LocalDate;
 import java.util.List;
