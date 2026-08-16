@@ -1,6 +1,8 @@
 package com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio;
 
-import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
+import com.matheus.srv_portfolio_scheduler.application.utils.CorrelationId;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.PortfolioComparisonDTO;
+import com.matheus.srv_portfolio_scheduler.application.event.PortfolioRebalanceRequestedEvent;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.CreateRecommendedPortfolioUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.RecommendedPortfolioRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;

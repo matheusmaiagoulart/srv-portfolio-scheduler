@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.adapters.input.filter;
 
-import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
+import com.matheus.srv_portfolio_scheduler.application.utils.CorrelationId;
 import jakarta.servlet.*;
 import org.springframework.stereotype.Component;
 
