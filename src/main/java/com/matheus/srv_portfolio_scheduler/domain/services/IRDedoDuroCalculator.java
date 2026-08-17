@@ -21,7 +21,9 @@ public class IRDedoDuroCalculator {
     private BigDecimal aliquota;
 
     public List<IRDedoDuroEvent> calculate(List<Delivery> deliveries, Map<Long, CustodyPurchaseDataDTO> customers) {
-        List<BrokerageAccount> customersList = customers.values().stream().map(CustodyPurchaseDataDTO::customerCustodies).toList();
+        List<BrokerageAccount> customersList = customers.values().stream()
+                .map(CustodyPurchaseDataDTO::customerCustodies).toList();
+
         List<IRDedoDuroEvent> irDedoDuroEvents = new ArrayList<>();
 
         Map<Long, BrokerageAccount> customerMap = customersList.stream()
