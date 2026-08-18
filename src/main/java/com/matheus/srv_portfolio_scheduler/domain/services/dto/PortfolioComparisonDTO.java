@@ -18,10 +18,6 @@ public record PortfolioComparisonDTO(
         public boolean isIncrease() {
             return newPercentage.compareTo(oldPercentage) > 0;
         }
-
-        public BigDecimal percentageDifference() {
-            return newPercentage.subtract(oldPercentage);
-        }
     }
 
     public record RemovedItem(String ticker) {
