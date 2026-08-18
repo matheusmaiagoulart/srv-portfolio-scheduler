@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.domain.services;
 
-import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.QuoteDTO;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Custody;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;

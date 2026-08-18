@@ -4,7 +4,7 @@ import com.matheus.srv_portfolio_scheduler.adapters.input.swagger.SwaggerPurchas
 import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseCommand;
 import com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase.ExecutePortfolioPurchaseResponse;
 import com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes.ImportQuotesCommand;
-import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.QuoteDTO;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ExecutePortfolioPurchaseUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ImportQuotesUseCase;
 import lombok.AllArgsConstructor;
