@@ -2,6 +2,7 @@ package com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolio
 
 import com.matheus.srv_portfolio_scheduler.domain.services.dto.PurchaseOrdersPerAsset;
 import com.matheus.srv_portfolio_scheduler.domain.services.dto.PurchaseSummaryDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.ResidualsFromMaster;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;

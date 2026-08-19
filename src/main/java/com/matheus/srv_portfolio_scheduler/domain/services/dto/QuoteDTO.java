@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.application.dto;
+package com.matheus.srv_portfolio_scheduler.domain.services.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

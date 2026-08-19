@@ -78,6 +78,30 @@ public class Custody {
         this.lastUpdate = OffsetDateTime.now();
     }
 
+    public Money sell(int quantity, Money currentPrice) {
+        if (quantity > this.quantity) {
+            throw new IllegalArgumentException("Cannot sell more than the current quantity.");
+        }
+
+        Money realisedAmount = currentPrice.multiply(BigDecimal.valueOf(quantity));
+
+        this.quantity -= quantity;
+        this.lastUpdate = OffsetDateTime.now();
+
+        return realisedAmount;
+    }
+
+    public void sellAllQuantity() {
+        this.quantity = 0;
+        this.averagePrice = Money.create(BigDecimal.ZERO);
+        this.lastUpdate = OffsetDateTime.now();
+    }
+
+    public void migrateAsset(String newTicker) {
+        this.ticker = newTicker;
+        this.lastUpdate = OffsetDateTime.now();
+    }
+
     /**
      * Calculates the Profit and Loss (P/L) of this custody position.
      * <p>
@@ -137,6 +161,6 @@ public class Custody {
 
         return Money.create(
                 currentValue.divide(portfolioCurrentValue.getAmount(), 4, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100)));
+                        .multiply(BigDecimal.valueOf(100)));
     }
 }

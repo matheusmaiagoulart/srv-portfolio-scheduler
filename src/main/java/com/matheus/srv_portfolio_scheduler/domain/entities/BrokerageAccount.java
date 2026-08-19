@@ -2,7 +2,6 @@ package com.matheus.srv_portfolio_scheduler.domain.entities;
 
 import com.matheus.srv_portfolio_scheduler.domain.enums.BrokerageAccountType;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.OffsetDateTime;

@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.command.DisableCustomerSubscription;
 
-import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
+import com.matheus.srv_portfolio_scheduler.application.utils.CorrelationId;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.DisableCustomerSubscriptionUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.CustomerRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Customer;

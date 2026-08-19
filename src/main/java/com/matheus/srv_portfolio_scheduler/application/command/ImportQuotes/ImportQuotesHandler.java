@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.command.ImportQuotes;
 
-import com.matheus.srv_portfolio_scheduler.application.dto.QuoteDTO;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.QuoteDTO;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ImportQuotesUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.AssetPriceRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.CotahistFilePort;

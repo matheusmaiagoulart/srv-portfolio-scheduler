@@ -1,7 +1,6 @@
-package com.matheus.srv_portfolio_scheduler.application.dto;
+package com.matheus.srv_portfolio_scheduler.domain.services.dto;
 
 import com.matheus.srv_portfolio_scheduler.domain.entities.Custody;
-import com.matheus.srv_portfolio_scheduler.domain.services.dto.TickerData;
 
 import java.util.Map;
 

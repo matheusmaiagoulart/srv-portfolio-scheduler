@@ -10,6 +10,7 @@ import com.matheus.srv_portfolio_scheduler.infrastructure.persistence.JpaCustody
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -30,11 +31,13 @@ public class CustodyRepositoryAdapter implements CustodyRepositoryPort {
 
         List<JpaCustody> saveResult = customerRepository.saveAll(jpaCustodies);
 
-        return saveResult.stream()
-                .map(jpaCustody -> {
-                    var domainCustomer = CustomerMapper.toDomain(jpaCustody.getBrokerageAccount().getCustomer());
-                    var domainBrokerage = BrokerageAccountMapper.toDomain(jpaCustody.getBrokerageAccount(), domainCustomer);
-                    return CustodyMapper.toDomain(jpaCustody, domainBrokerage);
-                }).toList();
+        List<Custody> persistedCustodies = new ArrayList<>(saveResult.size());
+        for (int index = 0; index < saveResult.size(); index++) {
+            persistedCustodies.add(CustodyMapper.toDomain(
+                    saveResult.get(index),
+                    custodies.get(index).getBrokerageAccount()));
+        }
+
+        return persistedCustodies;
     }
 }

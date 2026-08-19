@@ -2,13 +2,14 @@ package com.matheus.srv_portfolio_scheduler.adapters.output.commands;
 
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.BrokerageAccountMapper;
 import com.matheus.srv_portfolio_scheduler.adapters.mapper.CustomerMapper;
-import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
+import com.matheus.srv_portfolio_scheduler.application.utils.CorrelationId;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.BrokerageAccountRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Customer;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.BusinessException;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.DuplicatedCpfException;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.DuplicatedEmailException;
+import com.matheus.srv_portfolio_scheduler.domain.exceptions.MasterAccountNotFoundException;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaBrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.infrastructure.entities.JpaCustomer;
 import com.matheus.srv_portfolio_scheduler.infrastructure.persistence.JpaBrokerageAccountRepository;
@@ -17,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 import static net.logstash.logback.argument.StructuredArguments.kv;
 
@@ -68,11 +68,12 @@ public class BrokerageAccountRepositoryAdapter implements BrokerageAccountReposi
     }
 
     @Override
-    public Optional<BrokerageAccount> getMasterAccount() {
+    public BrokerageAccount getMasterAccount() {
         return repository.getMasterAccount()
                 .map(brokerageAccount -> {
                     var customer = CustomerMapper.toDomain(brokerageAccount.getCustomer());
                     return BrokerageAccountMapper.toDomain(brokerageAccount, customer);
-                });
+                })
+                .orElseThrow(MasterAccountNotFoundException::new);
     }
 }

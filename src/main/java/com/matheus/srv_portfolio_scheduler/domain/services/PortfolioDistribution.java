@@ -1,7 +1,7 @@
 package com.matheus.srv_portfolio_scheduler.domain.services;
 
-import com.matheus.srv_portfolio_scheduler.application.dto.DistributionContext;
-import com.matheus.srv_portfolio_scheduler.application.dto.DistributionOutput;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.DistributionContext;
+import com.matheus.srv_portfolio_scheduler.domain.services.dto.DistributionOutput;
 import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Custody;
 import com.matheus.srv_portfolio_scheduler.domain.entities.Delivery;

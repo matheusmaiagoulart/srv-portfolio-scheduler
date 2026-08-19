@@ -1,6 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.command.RegisterCustomerSubscriber;
 
-import com.matheus.srv_portfolio_scheduler.adapters.utils.CorrelationId;
+import com.matheus.srv_portfolio_scheduler.application.utils.CorrelationId;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.RegisterCustomerSubscriberUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.BrokerageAccountRepositoryPort;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.RecommendedPortfolioRepositoryPort;

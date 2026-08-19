@@ -1,4 +1,4 @@
-package com.matheus.srv_portfolio_scheduler.adapters.utils;
+package com.matheus.srv_portfolio_scheduler.application.utils;
 
 import org.slf4j.MDC;
 
