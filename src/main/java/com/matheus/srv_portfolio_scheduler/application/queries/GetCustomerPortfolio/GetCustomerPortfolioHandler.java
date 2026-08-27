@@ -5,6 +5,7 @@ import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.Redi
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.CustomerQueryRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GetCustomerPortfolioHandler implements GetCustomerPortfolioUseCase {
 
-    private static final String CACHE_PREFIX = "portfolio:";
+    @Value("${spring.data.redis.prefixes.customer-portfolio}")
+    private String CACHE_PREFIX;
 
     private final RedisCachePort redisCachePort;
     private final CustomerQueryRepositoryPort customerQueryRepositoryPort;
