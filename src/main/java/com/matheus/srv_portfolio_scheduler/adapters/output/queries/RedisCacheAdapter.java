@@ -4,6 +4,7 @@ import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.Redi
 import com.matheus.srv_portfolio_scheduler.infrastructure.config.RedisPrefixesProps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
@@ -24,7 +25,12 @@ public class RedisCacheAdapter implements RedisCachePort {
     @Override
     public <T> Optional<T> get(String key, Class<T> desserializationClass) {
         log.info("Fetching from Redis cache with key: {}", key);
-        Object result = redisTemplate.opsForValue().get(key);
+        Object result = null;
+        try {
+            result = redisTemplate.opsForValue().get(key);
+        } catch (RedisConnectionFailureException e) {
+            log.error("Redis connection failure while fetching key: {} cause: {}", key, e.getMessage());
+        }
 
         if (result == null) {
             log.info("No cache found for key: {}", key);

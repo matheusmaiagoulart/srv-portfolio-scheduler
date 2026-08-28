@@ -30,6 +30,7 @@ public class GetCustomerPortfolioHandler implements GetCustomerPortfolioUseCase 
         var cached = redisCachePort.get(queryConcat, GetCustomerPortfolioResponse.class);
         if (cached.isPresent()) return cached.get();
 
+        log.info("Executing query on database for customerId: {}", query.customerId());
         var response = customerQueryRepositoryPort.getCustomerPortfolio(query.customerId());
         redisCachePort.save(queryConcat, response, 250);
         return response;
