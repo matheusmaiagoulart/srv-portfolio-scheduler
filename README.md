@@ -1,6 +1,6 @@
 # 📈 PortfolioScheduler — Sistema de Compra Programada de Ações
 
-> Sistema de **corretora de ativos** que automatiza investimentos recorrentes em uma carteira recomendada de ações, construído com **Java 21**, **Spring Boot 3**, **Hexagonal Architecture**, **CQRS** e **DDD**.
+> Sistema de **corretora de ativos** que automatiza investimentos recorrentes em uma carteira recomendada de ações, construído com **Java 21**, **Spring Boot 4**, **Hexagonal Architecture**, **CQRS** e **DDD**.
 
 ---
 
@@ -129,7 +129,7 @@ srv-portfolio-scheduler/
 | Componente | Tecnologia |
 |------------|-----------|
 | **Runtime** | Java 21 + Virtual Threads |
-| **Framework** | Spring Boot 3.x |
+| **Framework** | Spring Boot 4.x |
 | **Banco de Dados** | SQL Server + Spring Data JPA + Flyway |
 | **Cache** | Redis (otimização de consultas) |
 | **Mensageria** | Apache Kafka (IR Dedo-Duro) |
