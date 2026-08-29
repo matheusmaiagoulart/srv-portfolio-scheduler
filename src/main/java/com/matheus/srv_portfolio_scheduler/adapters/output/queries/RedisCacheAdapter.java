@@ -1,8 +1,10 @@
 package com.matheus.srv_portfolio_scheduler.adapters.output.queries;
 
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.RedisCachePort;
+import com.matheus.srv_portfolio_scheduler.infrastructure.config.RedisPrefixesProps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
@@ -16,13 +18,19 @@ import java.util.concurrent.TimeUnit;
 public class RedisCacheAdapter implements RedisCachePort {
 
     private final ObjectMapper objectMapper;
+    private final RedisPrefixesProps redisPrefixesProps;
     private final RedisTemplate<String, Object> redisTemplate;
 
 
     @Override
     public <T> Optional<T> get(String key, Class<T> desserializationClass) {
         log.info("Fetching from Redis cache with key: {}", key);
-        Object result = redisTemplate.opsForValue().get(key);
+        Object result = null;
+        try {
+            result = redisTemplate.opsForValue().get(key);
+        } catch (RedisConnectionFailureException e) {
+            log.error("Redis connection failure while fetching key: {} cause: {}", key, e.getMessage());
+        }
 
         if (result == null) {
             log.info("No cache found for key: {}", key);
@@ -47,6 +55,16 @@ public class RedisCacheAdapter implements RedisCachePort {
             log.info("Saved to Redis cache with key: {}", key);
         } catch (Exception e) {
             log.error("Error saving to Redis cache with key: {}", key, e);
+        }
+    }
+
+    @Override
+    public void invalidateCacheForCustomersPortfolios() {
+        try {
+            redisTemplate.delete(redisPrefixesProps.getCustomerPortfolioPrefix());
+            log.info("Invalidated Redis cache for key: {}", redisPrefixesProps.getCustomerPortfolioPrefix());
+        } catch (Exception e) {
+            log.error("Error invalidating Redis cache for key: {}", redisPrefixesProps.getCustomerPortfolioPrefix(), e);
         }
     }
 }

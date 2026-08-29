@@ -5,6 +5,7 @@ import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.Reco
 import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.RedisCachePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetAllRecommendedPortfoliosHandler implements GetAllRecommendedPortfoliosUseCase {
 
-    private static final String CACHE_PREFIX = "portfolioHistory";
+    @Value("${spring.data.redis.prefixes.portfolio-history}")
+    private String CACHE_PREFIX;
 
     private final RedisCachePort redisCachePort;
     private final RecommendedPortfolioQueryRepositoryPort recommendedPortfolioQueryRepositoryPort;

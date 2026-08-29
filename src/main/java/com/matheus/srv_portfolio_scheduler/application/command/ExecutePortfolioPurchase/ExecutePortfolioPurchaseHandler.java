@@ -1,5 +1,6 @@
 package com.matheus.srv_portfolio_scheduler.application.command.ExecutePortfolioPurchase;
 
+import com.matheus.srv_portfolio_scheduler.application.ports.output.queries.RedisCachePort;
 import com.matheus.srv_portfolio_scheduler.application.utils.CorrelationId;
 import com.matheus.srv_portfolio_scheduler.application.ports.input.commands.ExecutePortfolioPurchaseUseCase;
 import com.matheus.srv_portfolio_scheduler.application.ports.output.commands.BrokerageAccountRepositoryPort;
@@ -10,6 +11,7 @@ import com.matheus.srv_portfolio_scheduler.domain.entities.BrokerageAccount;
 import com.matheus.srv_portfolio_scheduler.domain.entities.RecommendedPortfolio;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.ActivePortfolioNotFoundException;
 import com.matheus.srv_portfolio_scheduler.domain.exceptions.CotahistNotFoundException;
+import com.matheus.srv_portfolio_scheduler.domain.services.PurchaseExecutionDateValidator;
 import com.matheus.srv_portfolio_scheduler.domain.services.dto.PurchaseSummaryDTO;
 import com.matheus.srv_portfolio_scheduler.domain.valueObject.Money;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +28,12 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @RequiredArgsConstructor
 public class ExecutePortfolioPurchaseHandler implements ExecutePortfolioPurchaseUseCase {
 
+    private final RedisCachePort redisCachePort;
     private final CustomerRepositoryPort customerRepository;
     private final BrokerageAccountRepositoryPort brokerageRepository;
-    private final RecommendedPortfolioRepositoryPort recommendedPortfolioRepositoryPort;
+    private final PurchaseExecutionDateValidator purchaseExecutionDateValidator;
     private final PortfolioPurchaseExecutionService portfolioPurchaseExecutionService;
+    private final RecommendedPortfolioRepositoryPort recommendedPortfolioRepositoryPort;
 
     @Override
     @Transactional
@@ -39,6 +43,8 @@ public class ExecutePortfolioPurchaseHandler implements ExecutePortfolioPurchase
                 kv("correlationId", CorrelationId.get()),
                 kv("date", LocalDate.now().toString()));
 
+        purchaseExecutionDateValidator.validate(LocalDate.now());
+
         if (command.lastCotahist().isEmpty()) throw new CotahistNotFoundException();
 
         final RecommendedPortfolio portfolio = recommendedPortfolioRepositoryPort
@@ -47,6 +53,8 @@ public class ExecutePortfolioPurchaseHandler implements ExecutePortfolioPurchase
 
         BrokerageAccount masterAccount = brokerageRepository.getMasterAccount();
         Money thirdValueOfAllCustomers = customerRepository.getThirdAmountOfAllActiveCustomers();
+
+        redisCachePort.invalidateCacheForCustomersPortfolios();
 
         PurchaseSummaryDTO resultDistribution = portfolioPurchaseExecutionService.executePurchase(
                 portfolio,
