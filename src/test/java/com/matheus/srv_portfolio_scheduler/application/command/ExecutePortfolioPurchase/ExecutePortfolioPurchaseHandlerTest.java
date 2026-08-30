@@ -76,6 +76,9 @@ class ExecutePortfolioPurchaseHandlerTest {
         assertNotNull(response.executionDate());
         verify(purchaseExecutionDateValidator).validate(any(LocalDate.class));
         verify(purchaseExecutionService).executePurchase(portfolio, masterAccount, customersAmount, quotes);
+        var executionOrder = inOrder(purchaseExecutionService, redisCachePort);
+        executionOrder.verify(purchaseExecutionService).executePurchase(portfolio, masterAccount, customersAmount, quotes);
+        executionOrder.verify(redisCachePort).invalidateCacheForCustomersPortfolios();
     }
 
     @Test

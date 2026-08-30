@@ -104,4 +104,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+    @ExceptionHandler(CustomerNotFound.class)
+    public ResponseEntity<ExceptionResponse> handleCustomerNotFoundException(CustomerNotFound ex) {
+        return ResponseEntity
+                .status(404)
+                .body(new ExceptionResponse(404, ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(LatestTradingDateNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleLatestTradingDateNotFoundException(LatestTradingDateNotFoundException ex) {
+        return ResponseEntity
+                .status(404)
+                .body(new ExceptionResponse(404, ex.getErrorCode(), ex.getMessage()));
+    }
 }

@@ -54,14 +54,14 @@ public class ExecutePortfolioPurchaseHandler implements ExecutePortfolioPurchase
         BrokerageAccount masterAccount = brokerageRepository.getMasterAccount();
         Money thirdValueOfAllCustomers = customerRepository.getThirdAmountOfAllActiveCustomers();
 
-        redisCachePort.invalidateCacheForCustomersPortfolios();
-
         PurchaseSummaryDTO resultDistribution = portfolioPurchaseExecutionService.executePurchase(
                 portfolio,
                 masterAccount,
                 thirdValueOfAllCustomers,
                 command.lastCotahist()
         );
+
+        redisCachePort.invalidateCacheForCustomersPortfolios();
 
         return ExecutePortfolioPurchaseResponse.buildResponse(resultDistribution);
     }

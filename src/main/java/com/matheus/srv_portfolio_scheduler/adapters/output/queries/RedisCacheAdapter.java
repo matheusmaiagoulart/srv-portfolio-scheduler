@@ -5,10 +5,14 @@ import com.matheus.srv_portfolio_scheduler.infrastructure.config.RedisPrefixesPr
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -60,11 +64,38 @@ public class RedisCacheAdapter implements RedisCachePort {
 
     @Override
     public void invalidateCacheForCustomersPortfolios() {
+        String prefix = redisPrefixesProps.getCustomerPortfolioPrefix();
+        ScanOptions scanOptions = ScanOptions.scanOptions()
+                .match(prefix + "*")
+                .count(1000)
+                .build();
+
         try {
-            redisTemplate.delete(redisPrefixesProps.getCustomerPortfolioPrefix());
-            log.info("Invalidated Redis cache for key: {}", redisPrefixesProps.getCustomerPortfolioPrefix());
+            long deletedKeys = 0;
+            List<String> keysToDelete = new ArrayList<>(1000);
+
+            try (Cursor<String> cursor = redisTemplate.scan(scanOptions)) {
+                while (cursor.hasNext()) {
+                    keysToDelete.add(cursor.next());
+
+                    if (keysToDelete.size() == 1000) {
+                        deletedKeys += deleteKeys(keysToDelete);
+                    }
+                }
+            }
+
+            deletedKeys += deleteKeys(keysToDelete);
+            log.info("Invalidated {} Redis cache keys with prefix: {}", deletedKeys, prefix);
         } catch (Exception e) {
-            log.error("Error invalidating Redis cache for key: {}", redisPrefixesProps.getCustomerPortfolioPrefix(), e);
+            log.error("Error invalidating Redis cache keys with prefix: {}", prefix, e);
         }
+    }
+
+    private long deleteKeys(List<String> keys) {
+        if (keys.isEmpty()) return 0;
+
+        Long deletedKeys = redisTemplate.delete(new ArrayList<>(keys));
+        keys.clear();
+        return deletedKeys == null ? 0 : deletedKeys;
     }
 }
