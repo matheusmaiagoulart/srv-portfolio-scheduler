@@ -11,6 +11,10 @@ spring:
     driver-class-name: ${DRIVE}
     username: ${USERNAME}
     password: ${PASSWORD}
+    hikari:
+      maximum-pool-size: 40
+      max-lifetime: 1800000
+      idle-timeout: 600000
   jpa:
     hibernate:
       ddl-auto: none
@@ -37,6 +41,11 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
+      lettuce:
+        pool:
+          max-active: 50
+          max-idle: 20
+          min-idle: 5
       prefixes:
         customer-portfolio: "customer-portfolio:"
         portfolio-history: "portfolio-history:"
@@ -50,5 +59,6 @@ logging:
   level:
     org.flywaydb: debug
     org.springframework.boot.autoconfigure.flyway: debug
+    com.zaxxer.hikari.HikariConfig: debug
   pattern:
     console: "%d %-5level [%X{correlation_id}] %logger - %msg%n"
