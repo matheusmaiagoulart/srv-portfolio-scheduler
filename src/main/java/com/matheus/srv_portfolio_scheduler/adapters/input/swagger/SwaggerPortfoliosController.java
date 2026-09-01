@@ -4,6 +4,7 @@ import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommended
 import com.matheus.srv_portfolio_scheduler.application.command.CreateRecommendedPortfolio.CreateRecommendedPortfolioResponse;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetAllRecommendedPortfolios.GetAllRecommendedPortfoliosResponse;
 import com.matheus.srv_portfolio_scheduler.application.queries.GetCurrentRecommendedPortfolio.GetCurrentRecommendedPortfolioResponse;
+import com.matheus.srv_portfolio_scheduler.application.queries.GetMasterCustody.GetMasterCustodyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -67,4 +68,19 @@ public interface SwaggerPortfoliosController {
                     content = @Content(mediaType = "application/json"))
     })
     ResponseEntity<GetCurrentRecommendedPortfolioResponse> getCurrentRecommendedPortfolio();
+
+    @Operation(
+            summary = "Custody of master account",
+            description = "Returns the master account and its current residual custody."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Master custody returned successfully.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetMasterCustodyResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Master account not found.",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Internal server error.",
+                    content = @Content(mediaType = "application/json"))
+    })
+    ResponseEntity<GetMasterCustodyResponse> getMasterCustody();
 }
